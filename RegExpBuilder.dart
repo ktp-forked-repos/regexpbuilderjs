@@ -125,7 +125,14 @@ class RegExpBuilder {
   RegExpBuilder or(Function r) {
     var either = _either;
     var or = r(new RegExpBuilder()).getLiteral();
-    _literal.add("(?:(?:$either)|(?:$or))");
+    if (either == "") {
+      var literal = _literal.toString();
+      _literal = new StringBuffer(literal.substring(0, literal.length - 1));
+      _literal.add("|(?:$or))");
+    }
+    else {
+      _literal.add("(?:(?:$either)|(?:$or))");
+    }
     _clear();
     return this;
   }
