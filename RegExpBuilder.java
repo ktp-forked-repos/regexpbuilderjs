@@ -138,7 +138,13 @@ public class RegExpBuilder {
   	public RegExpBuilder or(RegExpBuilder r) {
   		String either = _either;
   		String or = r.getLiteral();
-  		_literal.append("(?:(?:" + either + ")|(?:" + or + "))");
+  		if (either == "") {
+  			_literal.deleteCharAt(_literal.length() - 1);
+  			_literal.append("|(?:" + or + "))");
+  		}
+  		else {
+  			_literal.append("(?:(?:" + either + ")|(?:" + or + "))");
+  		}
   		_clear();
   		return this;
   	}

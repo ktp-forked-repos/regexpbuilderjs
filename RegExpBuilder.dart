@@ -1,6 +1,6 @@
 class RegExpBuilder {
   
-  StringBuffer _literal;
+  List<String> _literal;
   bool _ignoreCase;
   bool _multiLine;
   HashSet<String> _specialCharactersInsideCharacterClass;
@@ -20,7 +20,7 @@ class RegExpBuilder {
   bool _capture;
   
   RegExpBuilder() {
-    _literal = new StringBuffer();
+    _literal = [];
     _specialCharactersInsideCharacterClass = new HashSet.from([@"^", @"-", @"]"]);
     _specialCharactersOutsideCharacterClass = new HashSet.from([@".", @"^", @"$", @"*", @"+", @"?", @"(", @")", @"[", @"{"]);
     _escapedString = new StringBuffer();
@@ -87,12 +87,11 @@ class RegExpBuilder {
   
   String getLiteral() {
     _flushState();
-    return _literal.toString();
+    return Strings.concatAll(_literal);
   }
   
   RegExp getRegExp() {
-    _flushState();
-    return new RegExp(_literal.toString(), _ignoreCase, _multiLine);
+    return new RegExp(getLiteral(), _ignoreCase, _multiLine);
   }
   
   RegExpBuilder ignoreCase() {
@@ -126,8 +125,8 @@ class RegExpBuilder {
     var either = _either;
     var or = r(new RegExpBuilder()).getLiteral();
     if (either == "") {
-      var literal = _literal.toString();
-      _literal = new StringBuffer(literal.substring(0, literal.length - 1));
+      var lastOr = _literal.last();
+      _literal[_literal.length - 1] = lastOr.substring(0, lastOr.length - 1);
       _literal.add("|(?:$or))");
     }
     else {

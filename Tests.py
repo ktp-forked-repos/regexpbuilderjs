@@ -32,6 +32,18 @@ class Test(unittest.TestCase):
         self.assertTrue(regex.match("qq") is not None)
         self.assertTrue(regex.match("pqq") is None)
         self.assertTrue(regex.match("qqp") is None)
+
+    def test_orLike_chain(self):
+        regex = RegExpBuilder()
+        regex.eitherLike(lambda r: r.exactly(1).of("p"))
+        regex.orLike(lambda r: r.exactly(1).of("q"))
+        regex.orLike(lambda r: r.exactly(1).of("r"))
+        regex = regex.getRegExp()
+
+        self.assertTrue(regex.match("p") is not None)
+        self.assertTrue(regex.match("q") is not None)
+        self.assertTrue(regex.match("r") is not None)
+        self.assertTrue(regex.match("s") is None)
   
     def test_exactly(self):
         regex = RegExpBuilder()

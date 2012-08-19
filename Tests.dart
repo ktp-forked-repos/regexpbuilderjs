@@ -36,6 +36,19 @@ main() {
     expect(!regex.hasMatch("qqp"));
   });
   
+  test("or chain", () {
+    var regex = new RegExpBuilder()
+      .either((r) => r.exactly(1).of("p"))
+      .or((r) => r.exactly(1).of("q"))
+      .or((r) => r.exactly(1).of("r"))
+      .getRegExp();
+    
+    expect(regex.hasMatch("p"));
+    expect(regex.hasMatch("q"));
+    expect(regex.hasMatch("r"));
+    expect(!regex.hasMatch("s"));
+  });
+  
   test("exactly", () {
     var regex = new RegExpBuilder()
       .start()

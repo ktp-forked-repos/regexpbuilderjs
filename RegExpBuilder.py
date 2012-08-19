@@ -3,20 +3,20 @@ import re
 class RegExpBuilder:
 
     def __init__(self):
-        self._literal = ''
+        self._literal = ""
         self._ignoreCase = False
-        self._specialCharactersInsideCharacterClass = set(['^', '-', ']'])
-        self._specialCharactersOutsideCharacterClass = set(['.', '^', '$', '*', '+', '?', '(', ')', '[', '{'])
+        self._specialCharactersInsideCharacterClass = set(["^", "-", "]"])
+        self._specialCharactersOutsideCharacterClass = set([".", "^", "$", "*", "+", "?", "(", ")", "[", "{"])
         self._min = -1
         self._max = -1
-        self._of = ''
+        self._of = ""
         self._ofAny = False
-        self._from = ''
-        self._notFrom = ''
-        self._like = ''
-        self._behind = ''
-        self._notBehind = ''
-        self._either = ''
+        self._from = ""
+        self._notFrom = ""
+        self._like = ""
+        self._behind = ""
+        self._notBehind = ""
+        self._either = ""
         self._reluctant = False
         self._capture = False
 
@@ -25,45 +25,45 @@ class RegExpBuilder:
         self._multiLine = False
         self._min = -1
         self._max = -1
-        self._of = ''
+        self._of = ""
         self._ofAny = False
-        self._from = ''
-        self._notFrom = ''
-        self._like = ''
-        self._behind = ''
-        self._notBehind = ''
-        self._either = ''
+        self._from = ""
+        self._notFrom = ""
+        self._like = ""
+        self._behind = ""
+        self._notBehind = ""
+        self._either = ""
         self._reluctant = False
         self._capture = False
 
     def _flushState(self):
-        if self._of != '' or self._ofAny or self._from != '' or self._notFrom != '' or self._like != '':
-            captureLiteral = '' if self._capture else '?:'
+        if self._of != "" or self._ofAny or self._from != "" or self._notFrom != "" or self._like != "":
+            captureLiteral = "" if self._capture else "?:"
             quantityLiteral = self._getQuantityLiteral()
             characterLiteral = self._getCharacterLiteral()
-            reluctantLiteral = '?' if self._reluctant else ''
-            behindLiteral = '(?=' + self._behind + ')' if self._behind != '' else ''
-            notBehindLiteral = '(?!' + self._notBehind + ')' if self._notBehind != '' else ''
-            self._literal += '(' + captureLiteral + '(?:' + characterLiteral + ')' + quantityLiteral + reluctantLiteral + ')' + behindLiteral + notBehindLiteral
+            reluctantLiteral = "?" if self._reluctant else ""
+            behindLiteral = "(?=" + self._behind + ")" if self._behind != "" else ""
+            notBehindLiteral = "(?!" + self._notBehind + ")" if self._notBehind != "" else ""
+            self._literal += "(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")" + behindLiteral + notBehindLiteral
             self._clear()
   
     def _getQuantityLiteral(self):
         if self._min != -1:
             if self._max != -1:
-                return '{' + str(self._min) + ',' + str(self._max) + '}'
-            return '{' + str(self._min) + ',}'
-        return '{0,' + str(self._max) + '}'
+                return "{" + str(self._min) + "," + str(self._max) + "}"
+            return "{" + str(self._min) + ",}"
+        return "{0," + str(self._max) + "}"
   
     def _getCharacterLiteral(self):
-        if self._of != '':
+        if self._of != "":
             return self._of
         if self._ofAny:
-            return '.'
-        if self._from != '':
-            return '[' + self._from + ']'
-        if self._notFrom != '':
-            return '[^' + self._notFrom + ']'
-        if self._like != '':
+            return "."
+        if self._from != "":
+            return "[" + self._from + "]"
+        if self._notFrom != "":
+            return "[^" + self._notFrom + "]"
+        if self._like != "":
             return self._like
   
     def getLiteral(self):
@@ -88,12 +88,12 @@ class RegExpBuilder:
         return self
   
     def start(self):
-        self._literal += '(?:^)'
+        self._literal += "(?:^)"
         return self
   
     def end(self):
         self._flushState()
-        self._literal += '(?:$)'
+        self._literal += "(?:$)"
         return self
   
     def eitherLike(self, r):
@@ -105,7 +105,11 @@ class RegExpBuilder:
     def orLike(self, r):
         eitherLike = self._either
         orLike = r(RegExpBuilder()).getLiteral()
-        self._literal += '(?:(?:' + eitherLike + ')|(?:' + orLike + '))'
+        if eitherLike == "":
+            self._literal = self._literal[:-1]
+            self._literal += "|(?:" + orLike + "))"
+        else:
+            self._literal += "(?:(?:" + eitherLike + ")|(?:" + orLike + "))"
         self._clear()
         return self
 
@@ -140,12 +144,12 @@ class RegExpBuilder:
 
   
     def fromClass(self, s):
-        self._from = self._escapeInsideCharacterClass(''.join(s))
+        self._from = self._escapeInsideCharacterClass("".join(s))
         return self
 
   
     def notFromClass(self, s):
-        self._notFrom = self._escapeInsideCharacterClass(''.join(s))
+        self._notFrom = self._escapeInsideCharacterClass("".join(s))
         return self
 
   
@@ -183,11 +187,11 @@ class RegExpBuilder:
 
   
     def _escapeSpecialCharacters(self, s, specialCharacters):
-        escapedString = ''
+        escapedString = ""
         for i in range(len(s)):
             character = s[i]
             if character in specialCharacters:
-                escapedString += '\\' + character
+                escapedString += "\\" + character
             else:
                 escapedString += character
 

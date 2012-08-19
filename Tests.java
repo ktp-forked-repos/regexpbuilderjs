@@ -41,6 +41,22 @@ public class Tests {
 		assertTrue(!regex.matcher("pqq").matches());
 		assertTrue(!regex.matcher("qqp").matches());
 	}
+	
+	@Test public void orChain() {
+		RegExpBuilder p1 = new RegExpBuilder().exactly(1).of("p");
+		RegExpBuilder p2 = new RegExpBuilder().exactly(1).of("q");
+		RegExpBuilder p3 = new RegExpBuilder().exactly(1).of("r");
+		Pattern regex = new RegExpBuilder()
+  			.either(p1)
+  			.or(p2)
+  			.or(p3)
+  			.getRegExp();
+	    
+		assertTrue(regex.matcher("p").matches());
+		assertTrue(regex.matcher("q").matches());
+		assertTrue(regex.matcher("r").matches());
+		assertTrue(!regex.matcher("s").matches());
+	}
 	  
 	@Test public void exactly() {
 	    Pattern regex = new RegExpBuilder()

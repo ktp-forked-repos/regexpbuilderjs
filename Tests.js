@@ -87,6 +87,19 @@ tests.push(new Test("either or", function (self) {
     self.expect(!regex.test("qqp"));
 }));
 
+tests.push(new Test("or chain", function (self) {
+    var regex = new RegExpBuilder()
+        .either(function (r) { return r.exactly(1).of("p"); })
+        .or(function (r) { return r.exactly(1).of("q"); })
+        .or(function (r) { return r.exactly(1).of("r"); })
+        .getRegExp();
+
+    self.expect(regex.test("p"));
+    self.expect(regex.test("q"));
+    self.expect(regex.test("r"));
+    self.expect(!regex.test("s"));
+}));
+
 tests.push(new Test("exactly", function (self) {
     var regex = new RegExpBuilder()
         .start()

@@ -107,7 +107,15 @@
     self.or = function (r) {
         var either = self._either;
         var or = r(new RegExpBuilder()).getLiteral();
-        self._literal.push("(?:(?:" + either + ")|(?:" + or + "))");
+        if (either == "") {
+            var lastOr = self._literal[self._literal.length - 1];
+            lastOr = lastOr.substring(0, lastOr.length - 1);
+            self._literal[self._literal.length - 1] = lastOr;
+            self._literal.push("|(?:" + or + "))");
+        }
+        else {
+            self._literal.push("(?:(?:" + either + ")|(?:" + or + "))");
+        }
         self._clear();
         return self;
     }
