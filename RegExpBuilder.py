@@ -103,9 +103,6 @@ class RegExpBuilder:
 
     def eitherString(self, s):
         return self.eitherLike(lambda r: r.exactly(1).of(s))
-
-    def eitherFrom(self, s):
-        return self.eitherLike(lambda r: r.exactly(1).fromClass(s))
   
     def orLike(self, r):
         eitherLike = self._either
@@ -126,34 +123,28 @@ class RegExpBuilder:
         self._min = n
         self._max = n
         return self
-
   
     def min(self, n):
         self._flushState()
         self._min = n
         return self
-
   
     def max(self, n):
         self._flushState()
         self._max = n
         return self
-
   
     def of(self, s):
         self._of = self._escapeOutsideCharacterClass(s)
         return self
-
   
     def ofAny(self):
         self._ofAny = True
         return self
-
   
     def fromClass(self, s):
         self._from = self._escapeInsideCharacterClass("".join(s))
         return self
-
   
     def notFromClass(self, s):
         self._notFrom = self._escapeInsideCharacterClass("".join(s))
@@ -163,27 +154,22 @@ class RegExpBuilder:
     def like(self, r):
         self._like = r(RegExpBuilder()).getLiteral()
         return self
-
   
     def reluctantly(self):
         self._reluctant = True
         return self
-
   
     def behind(self, r):
         self._behind = r(RegExpBuilder()).getLiteral()
         return self
-
   
     def notBehind(self, r):
         self._notBehind = r(RegExpBuilder()).getLiteral()
         return self
-
   
     def asCapturingGroup(self):
         self._capture = True
         return self
-
   
     def _escapeInsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)
@@ -191,7 +177,6 @@ class RegExpBuilder:
 
     def _escapeOutsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersOutsideCharacterClass)
-
   
     def _escapeSpecialCharacters(self, s, specialCharacters):
         escapedString = ""
