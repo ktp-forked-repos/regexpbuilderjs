@@ -104,6 +104,10 @@
         return self;
     }
 
+    self.eitherString = function (s) {
+        return self.either(function (r) { return r.exactly(1).of(s); });
+    }
+
     self.or = function (r) {
         var either = self._either;
         var or = r(new RegExpBuilder()).getLiteral();
@@ -118,10 +122,6 @@
         }
         self._clear();
         return self;
-    }
-
-    self.eitherString = function (s) {
-        return self.either(function (r) { return r.exactly(1).of(s); });
     }
 
     self.orString = function (s) {
