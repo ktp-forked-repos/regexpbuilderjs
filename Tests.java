@@ -57,6 +57,17 @@ public class Tests {
 		assertTrue(regex.matcher("r").matches());
 		assertTrue(!regex.matcher("s").matches());
 	}
+	
+	@Test public void orString() {
+		Pattern regex = new RegExpBuilder()
+  			.either("p")
+  			.or("q")
+  			.getRegExp();
+	    
+		assertTrue(regex.matcher("p").matches());
+		assertTrue(regex.matcher("q").matches());
+		assertTrue(!regex.matcher("r").matches());
+	}
 	  
 	@Test public void exactly() {
 	    Pattern regex = new RegExpBuilder()

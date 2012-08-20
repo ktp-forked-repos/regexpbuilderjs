@@ -5,7 +5,7 @@ class RegExpBuilder {
   bool _multiLine;
   HashSet<String> _specialCharactersInsideCharacterClass;
   HashSet<String> _specialCharactersOutsideCharacterClass;
-  StringBuffer _escapedString;
+  List<String> _escapedString;
   int _min;
   int _max;
   String _of;
@@ -23,7 +23,7 @@ class RegExpBuilder {
     _literal = [];
     _specialCharactersInsideCharacterClass = new HashSet.from([@"^", @"-", @"]"]);
     _specialCharactersOutsideCharacterClass = new HashSet.from([@".", @"^", @"$", @"*", @"+", @"?", @"(", @")", @"[", @"{"]);
-    _escapedString = new StringBuffer();
+    _escapedString = [];
     _clear();
   }
   
@@ -121,6 +121,10 @@ class RegExpBuilder {
     return this;
   }
   
+  RegExpBuilder eitherString(String s) {
+    return this.either((r) => r.exactly(1).of(s));
+  }
+  
   RegExpBuilder or(Function r) {
     var either = _either;
     var or = r(new RegExpBuilder()).getLiteral();
@@ -136,10 +140,19 @@ class RegExpBuilder {
     return this;
   }
   
+  RegExpBuilder orString(String s) {
+    return this.or((r) => r.exactly(1).of(s));
+  }
+  
   RegExpBuilder exactly(int n) {
     _flushState();
     _min = n;
     _max = n;
+    return this;
+  }
+  
+  RegExpBuilder a(String s) {
+    this.exactly(1).of(s);
     return this;
   }
   
@@ -219,6 +232,6 @@ class RegExpBuilder {
         _escapedString.add(character);
       }
     }
-    return _escapedString.toString();
+    return Strings.concatAll(_escapedString);
   }
 }

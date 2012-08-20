@@ -49,6 +49,17 @@ main() {
     expect(!regex.hasMatch("s"));
   });
   
+  test("orString", () {
+    var regex = new RegExpBuilder()
+      .eitherString("p")
+      .orString("q")
+      .getRegExp();
+    
+    expect(regex.hasMatch("p"));
+    expect(regex.hasMatch("q"));
+    expect(!regex.hasMatch("r"));
+  });
+  
   test("exactly", () {
     var regex = new RegExpBuilder()
       .start()

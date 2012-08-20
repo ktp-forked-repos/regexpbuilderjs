@@ -134,6 +134,10 @@ public class RegExpBuilder {
   		_either = r.getLiteral();
   		return this;
   	}
+  	
+  	public RegExpBuilder either(String s) {
+  		return this.either(new RegExpBuilder().exactly(1).of(s));
+  	}
   
   	public RegExpBuilder or(RegExpBuilder r) {
   		String either = _either;
@@ -147,6 +151,10 @@ public class RegExpBuilder {
   		}
   		_clear();
   		return this;
+  	}
+  	
+  	public RegExpBuilder or(String s) {
+  		return this.or(new RegExpBuilder().exactly(1).of(s));
   	}
   
   	public RegExpBuilder exactly(int n) {

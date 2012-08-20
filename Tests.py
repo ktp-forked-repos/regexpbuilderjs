@@ -44,6 +44,16 @@ class Test(unittest.TestCase):
         self.assertTrue(regex.match("q") is not None)
         self.assertTrue(regex.match("r") is not None)
         self.assertTrue(regex.match("s") is None)
+
+    def test_orString(self):
+        regex = RegExpBuilder()
+        regex.eitherString("p")
+        regex.orString("q")
+        regex = regex.getRegExp()
+
+        self.assertTrue(regex.match("p") is not None)
+        self.assertTrue(regex.match("q") is not None)
+        self.assertTrue(regex.match("r") is None)
   
     def test_exactly(self):
         regex = RegExpBuilder()

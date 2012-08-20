@@ -120,6 +120,14 @@
         return self;
     }
 
+    self.eitherString = function (s) {
+        return self.either(function (r) { return r.exactly(1).of(s); });
+    }
+
+    self.orString = function (s) {
+        return self.or(function (r) { return r.exactly(1).of(s); });
+    }
+
     self.exactly = function (n) {
         self._flushState();
         self._min = n;

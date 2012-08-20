@@ -101,6 +101,11 @@ class RegExpBuilder:
         self._either = r(RegExpBuilder()).getLiteral()
         return self
 
+    def eitherString(self, s):
+        return self.eitherLike(lambda r: r.exactly(1).of(s))
+
+    def eitherFrom(self, s):
+        return self.eitherLike(lambda r: r.exactly(1).fromClass(s))
   
     def orLike(self, r):
         eitherLike = self._either
@@ -113,6 +118,8 @@ class RegExpBuilder:
         self._clear()
         return self
 
+    def orString(self, s):
+        return self.orLike(lambda r: r.exactly(1).of(s))
   
     def exactly(self, n):
         self._flushState()

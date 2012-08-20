@@ -100,6 +100,17 @@ tests.push(new Test("or chain", function (self) {
     self.expect(!regex.test("s"));
 }));
 
+tests.push(new Test("eitherString orString", function (self) {
+    var regex = new RegExpBuilder()
+        .eitherString("p")
+        .orString("q")
+        .getRegExp();
+
+    self.expect(regex.test("p"));
+    self.expect(regex.test("q"));
+    self.expect(!regex.test("r"));
+}));
+
 tests.push(new Test("exactly", function (self) {
     var regex = new RegExpBuilder()
         .start()
