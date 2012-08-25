@@ -151,11 +151,6 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder a(String s) {
-    this.exactly(1).of(s);
-    return this;
-  }
-  
   RegExpBuilder min(int n) {
     _flushState();
     _min = n;
