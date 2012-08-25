@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public class RegExpBuilder {
-	private StringBuffer _literal;
+	private StringBuilder _literal;
 	private Boolean _ignoreCase;
 	private Boolean _multiLine;
 	private HashSet<Character> _specialCharactersInsideCharacterClass;
 	private HashSet<Character> _specialCharactersOutsideCharacterClass;
-	private StringBuffer _escapedString;
+	private StringBuilder _escapedString;
 	private int _min;
 	private int _max;
 	private String _of;
@@ -25,10 +25,10 @@ public class RegExpBuilder {
 	private Boolean _capture;
   
 	public RegExpBuilder() {
-		_literal = new StringBuffer();
+		_literal = new StringBuilder();
 		_specialCharactersInsideCharacterClass = new HashSet<Character>(Arrays.asList(new Character[]{ '^', '-', ']' }));
 		_specialCharactersOutsideCharacterClass = new HashSet<Character>(Arrays.asList(new Character[]{ '.', '^', '$', '*', '+', '?', '(', ')', '[', '{' }));
-		_escapedString = new StringBuffer();
+		_escapedString = new StringBuilder();
 		_clear();
 	}
   
@@ -230,7 +230,7 @@ public class RegExpBuilder {
   	}
   
   	private String _escapeSpecialCharacters(String s, HashSet<Character> specialCharacters) {
-  		_escapedString = new StringBuffer();
+  		_escapedString = new StringBuilder();
   		for (int i = 0; i < s.length(); i++) {
   			char character = s.charAt(i);
   			if (specialCharacters.contains(character)) {
