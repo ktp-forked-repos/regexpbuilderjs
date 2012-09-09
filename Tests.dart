@@ -177,8 +177,8 @@ main() {
   
   test("like", () {
     var pattern = (r) => r
-        .min(1).of("p")
-        .min(2).of("q");
+      .min(1).of("p")
+      .min(2).of("q");
     
     var regex = new RegExpBuilder()
       .start()
