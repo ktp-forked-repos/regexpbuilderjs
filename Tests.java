@@ -1,5 +1,8 @@
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -144,6 +147,18 @@ public class Tests {
 	    
 	    assertTrue(regex.matcher("pqr").matches());
 	}
+	
+	@Test public void ofGroup() {
+	    Pattern regex = new RegExpBuilder()
+	    	.start()
+	    	.exactly(3).of("p").asGroup()
+	    	.exactly(1).of("q")
+	    	.exactly(1).ofGroup(1)
+	    	.end()
+	    	.getRegExp();
+	    
+	    assertTrue(regex.matcher("pppqppp").matches());
+	}
 	  
 	@Test public void from() {
 	    char[] someLetters = { 'p', 'q', 'r' };
@@ -225,10 +240,10 @@ public class Tests {
 	    assertTrue(!regex.matcher("dartpqr").matches());
 	}
 	  
-	@Test public void asCapturingGroup() {
+	@Test public void asGroup() {
 	    Pattern regex = new RegExpBuilder()
 	    	.min(1).max(3).of("p")
-	    	.exactly(1).of("dart").asCapturingGroup()
+	    	.exactly(1).of("dart").asGroup()
 	    	.exactly(1).from(new char[]{ 'p', 'q', 'r' })
 	    	.getRegExp();
 	    Matcher m = regex.matcher("pdartq");

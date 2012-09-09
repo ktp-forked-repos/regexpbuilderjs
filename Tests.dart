@@ -136,6 +136,18 @@ main() {
     expect(regex.hasMatch("pqr"));
   });
   
+  test("ofGroup", () {
+    var regex = new RegExpBuilder()
+      .start()
+      .exactly(3).of("p").asGroup()
+      .exactly(1).of("q")
+      .exactly(1).ofGroup(1)
+      .end()
+      .getRegExp();
+    
+    expect(regex.hasMatch("pppqppp"));
+  });
+  
   test("from", () {
     var someLetters = ["p", "q", "r"];
     var regex = new RegExpBuilder()
@@ -208,10 +220,10 @@ main() {
     expect(!regex.hasMatch("dartpqr"));
   });
   
-  test("asCapturingGroup", () {
+  test("asGroup", () {
     var regex = new RegExpBuilder()
       .min(1).max(3).of("p")
-      .exactly(1).of("dart").asCapturingGroup()
+      .exactly(1).of("dart").asGroup()
       .exactly(1).from(["p", "q", "r"])
       .getRegExp();
     

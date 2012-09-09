@@ -15,6 +15,7 @@ public class RegExpBuilder {
 	private int _max;
 	private String _of;
 	private Boolean _ofAny;
+	private int _ofGroup;
 	private String _from;
 	private String _notFrom;
 	private String _like;
@@ -39,6 +40,7 @@ public class RegExpBuilder {
 		_max = -1;
 		_of = "";
 		_ofAny = false;
+		_ofGroup = -1;
 		_from = "";
 		_notFrom = "";
 		_like = "";
@@ -50,7 +52,7 @@ public class RegExpBuilder {
 	}
   
   	private void _flushState() {
-  		if (_of != "" || _ofAny || _from != "" || _notFrom != "" || _like != "") {
+  		if (_of != "" || _ofAny || _ofGroup > 0 || _from != "" || _notFrom != "" || _like != "") {
   			String captureLiteral = _capture ? "" : "?:";
   			String quantityLiteral = getQuantityLiteral();
   			String characterLiteral = getCharacterLiteral();
@@ -78,6 +80,9 @@ public class RegExpBuilder {
   		}
   		if (_ofAny) {
   			return ".";
+  		}
+  		if (_ofGroup > 0) {
+  			return "\\" + _ofGroup;
   		}
   		if (_from != "") {
   			return "[" + _from + "]";
@@ -185,6 +190,11 @@ public class RegExpBuilder {
   		_ofAny = true;
   		return this;
   	}
+  	
+  	public RegExpBuilder ofGroup(int n) {
+  		_ofGroup = n;
+  		return this;
+  	}
   
   	public RegExpBuilder from(char[] s) {
   		_from = _escapeInsideCharacterClass(new String(s));
@@ -216,7 +226,7 @@ public class RegExpBuilder {
   		return this;
   	}
   
-  	public RegExpBuilder asCapturingGroup() {
+  	public RegExpBuilder asGroup() {
   		_capture = true;
   		return this;
   	}

@@ -187,6 +187,18 @@ tests.push(new Test("ofAny", function (self) {
     self.expect(regex.test("pqr"));
 }));
 
+tests.push(new Test("ofGroup", function (self) {
+    var regex = new RegExpBuilder()
+        .start()
+        .exactly(3).of("p").asGroup()
+        .exactly(1).of("q")
+        .exactly(1).ofGroup(1)
+        .end()
+        .getRegExp();
+
+    self.expect(regex.test("pppqppp"));
+}));
+
 tests.push(new Test("from", function (self) {
     var someLetters = ["p", "q", "r"];
     var regex = new RegExpBuilder()
@@ -259,10 +271,10 @@ tests.push(new Test("notBehind", function (self) {
     self.expect(!regex.test("dartpqr"));
 }));
 
-tests.push(new Test("asCapturingGroup", function (self) {
+tests.push(new Test("asGroup", function (self) {
     var regex = new RegExpBuilder()
         .min(1).max(3).of("p")
-        .exactly(1).of("dart").asCapturingGroup()
+        .exactly(1).of("dart").asGroup()
         .exactly(1).from(["p", "q", "r"])
         .getRegExp();
 

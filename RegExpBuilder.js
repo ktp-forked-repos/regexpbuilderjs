@@ -13,6 +13,7 @@
         self._max = -1;
         self._of = "";
         self._ofAny = false;
+        self._ofGroup = -1;
         self._from = "";
         self._notFrom = "";
         self._like = "";
@@ -26,7 +27,7 @@
     self._clear();
 
     self._flushState = function () {
-        if (self._of != "" || self._ofAny || self._from != "" || self._notFrom != "" || self._like != "") {
+        if (self._of != "" || self._ofAny || self._ofGroup > 0 || self._from != "" || self._notFrom != "" || self._like != "") {
             var captureLiteral = self._capture ? "" : "?:";
             var quantityLiteral = self._getQuantityLiteral();
             var characterLiteral = self._getCharacterLiteral();
@@ -54,6 +55,9 @@
         }
         if (self._ofAny) {
             return ".";
+        }
+        if (self._ofGroup > 0) {
+            return "\\" + self._ofGroup;
         }
         if (self._from != "") {
             return "[" + self._from + "]";
@@ -157,6 +161,11 @@
         return self;
     }
 
+    self.ofGroup = function (n) {
+        self._ofGroup = n;
+        return self;
+    }
+
     self.from = function (s) {
         self._from = self._escapeInsideCharacterClass(s.join(""));
         return self;
@@ -187,7 +196,7 @@
         return self;
     }
 
-    self.asCapturingGroup = function () {
+    self.asGroup = function () {
         self._capture = true;
         return self;
     }

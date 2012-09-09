@@ -11,6 +11,7 @@ class RegExpBuilder:
         self._max = -1
         self._of = ""
         self._ofAny = False
+        self._ofGroup = -1
         self._from = ""
         self._notFrom = ""
         self._like = ""
@@ -27,6 +28,7 @@ class RegExpBuilder:
         self._max = -1
         self._of = ""
         self._ofAny = False
+        self._ofGroup = -1
         self._from = ""
         self._notFrom = ""
         self._like = ""
@@ -37,7 +39,7 @@ class RegExpBuilder:
         self._capture = False
 
     def _flushState(self):
-        if self._of != "" or self._ofAny or self._from != "" or self._notFrom != "" or self._like != "":
+        if self._of != "" or self._ofAny or self._ofGroup > 0 or self._from != "" or self._notFrom != "" or self._like != "":
             captureLiteral = "" if self._capture else "?:"
             quantityLiteral = self._getQuantityLiteral()
             characterLiteral = self._getCharacterLiteral()
@@ -59,6 +61,8 @@ class RegExpBuilder:
             return self._of
         if self._ofAny:
             return "."
+        if self._ofGroup > 0:
+            return "\\" + str(self._ofGroup)
         if self._from != "":
             return "[" + self._from + "]"
         if self._notFrom != "":
@@ -141,6 +145,10 @@ class RegExpBuilder:
     def ofAny(self):
         self._ofAny = True
         return self
+
+    def ofGroup(self, n):
+        self._ofGroup = n
+        return self
   
     def fromClass(self, s):
         self._from = self._escapeInsideCharacterClass("".join(s))
@@ -167,7 +175,7 @@ class RegExpBuilder:
         self._notBehind = r(RegExpBuilder()).getLiteral()
         return self
   
-    def asCapturingGroup(self):
+    def asGroup(self):
         self._capture = True
         return self
   

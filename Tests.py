@@ -124,6 +124,17 @@ class Test(unittest.TestCase):
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("pqr") is not None)
+
+    def test_ofGroup(self):
+        regex = RegExpBuilder()
+        regex.start()
+        regex.exactly(3).of("p").asGroup()
+        regex.exactly(1).of("q")
+        regex.exactly(1).ofGroup(1)
+        regex.end()
+        regex = regex.getRegExp()
+        
+        self.assertTrue(regex.match("pppqppp") is not None)
   
     def test_fromClass(self):
         someLetters = ["p", "q", "r"]
@@ -189,10 +200,10 @@ class Test(unittest.TestCase):
         self.assertTrue(regex.match("dartlang") is not None)
         self.assertTrue(regex.match("dartpqr") is None)
   
-    def test_asCapturingGroup(self):
+    def test_asGroup(self):
         regex = RegExpBuilder()
         regex.min(1).max(3).of("p")
-        regex.exactly(1).of("dart").asCapturingGroup()
+        regex.exactly(1).of("dart").asGroup()
         regex.exactly(1).fromClass(["p", "q", "r"])
         regex = regex.getRegExp()
         
