@@ -24,7 +24,7 @@ regex.test("$10.00")); // true
 
 <h3>Valid statement</h3>
 
-'''
+```
 var languages = ["Dart", "Javascript", "Java", "Python"];
 var regex = new RegExpBuilder()
   .start()
