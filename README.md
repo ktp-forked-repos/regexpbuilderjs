@@ -18,4 +18,6 @@ var regex = new RegExpBuilder()
   .exactly(1).of(".")
   .exactly(2).from(digits)
   .getRegExp();
+  
+regex.test("$10.00")); // true
 ```
