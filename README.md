@@ -36,3 +36,6 @@ var regex = new RegExpBuilder()
   
 regex.test("RegExpBuilder is available for Dart."); // true
 ```
+
+<h3>API documentation</h3>
+RegExpbuilder can represent literally every possible regular expression using methods such as either(), or(), behind(), asGroup() and so on. You can find the API documentation for each language here.
