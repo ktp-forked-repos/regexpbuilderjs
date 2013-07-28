@@ -21,3 +21,18 @@ var regex = new RegExpBuilder()
   
 regex.test("$10.00")); // true
 ```
+
+<h3>Valid statement</h3>
+
+'''
+var languages = ["Dart", "Javascript", "Java", "Python"];
+var regex = new RegExpBuilder()
+  .start()
+  .exactly(1).of("RegExpBuilder is available for ")
+  .exactly(1).from(languages)
+  .exactly(1).of(".")
+  .end()
+  .getRegExpBuilder();
+  
+regex.test("RegExpBuilder is available for Dart."); // true
+```
