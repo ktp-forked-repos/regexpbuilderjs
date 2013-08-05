@@ -22,19 +22,20 @@ var regex = new RegExpBuilder()
 regex.test("$10.00")); // true
 ```
 
-<h3>Valid statement</h3>
+<h3>Nested patterns</h3>
 
 ```
-var languages = ["Dart", "Javascript", "Java", "Python"];
+var pattern = function (r) {
+    return r.min(1).of("p").min(2).of("q");
+}
+
 var regex = new RegExpBuilder()
-  .start()
-  .exactly(1).of("RegExpBuilder is available for ")
-  .exactly(1).from(languages)
-  .exactly(1).of(".")
-  .end()
-  .getRegExpBuilder();
-  
-regex.test("RegExpBuilder is available for Dart."); // true
+    .start()
+    .exactly(2).like(pattern)
+    .end()
+    .getRegExp();
+
+self.expect(regex.test("pqqpqq")); // true
 ```
 
 <h3>API documentation</h3>
