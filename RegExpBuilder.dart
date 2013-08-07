@@ -120,17 +120,17 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder either(Function r) {
+  RegExpBuilder eitherLike(Function r) {
     _flushState();
     _either = r(new RegExpBuilder()).getLiteral();
     return this;
   }
   
-  RegExpBuilder eitherString(String s) {
-    return this.either((r) => r.exactly(1).of(s));
+  RegExpBuilder either(String s) {
+    return this.eitherLike((r) => r.exactly(1).of(s));
   }
   
-  RegExpBuilder or(Function r) {
+  RegExpBuilder orLike(Function r) {
     var either = _either;
     var or = r(new RegExpBuilder()).getLiteral();
     if (either == "") {
@@ -145,8 +145,8 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder orString(String s) {
-    return this.or((r) => r.exactly(1).of(s));
+  RegExpBuilder or(String s) {
+    return this.orLike((r) => r.exactly(1).of(s));
   }
   
   RegExpBuilder exactly(int n) {
@@ -203,13 +203,23 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder behind(Function r) {
+  RegExpBuilder behindPattern(Function r) {
     _behind = r(new RegExpBuilder()).getLiteral();
     return this;
   }
   
-  RegExpBuilder notBehind(Function r) {
+  RegExpBuilder behind(String s) {
+    _behind = new RegExpBuilder().exactly(1).of(s).getLiteral();
+    return this;
+  }
+  
+  RegExpBuilder notBehindPattern(Function r) {
     _notBehind = r(new RegExpBuilder()).getLiteral();
+    return this;
+  }
+  
+  RegExpBuilder notBehind(String s) {
+    _notBehind = new RegExpBuilder().exactly(1).of(s).getLiteral();
     return this;
   }
   

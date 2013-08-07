@@ -220,9 +220,19 @@ public class RegExpBuilder {
   		_behind = r.getLiteral();
   		return this;
   	}
+  	
+  	public RegExpBuilder behind(String s) {
+  		_behind = new RegExpBuilder().exactly(1).of(s).getLiteral();
+  		return this;
+  	}
   
   	public RegExpBuilder notBehind(RegExpBuilder r) {
   		_notBehind = r.getLiteral();
+  		return this;
+  	}
+  	
+  	public RegExpBuilder notBehind(String s) {
+  		_notBehind = new RegExpBuilder().exactly(1).of(s).getLiteral();
   		return this;
   	}
   

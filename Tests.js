@@ -73,11 +73,11 @@ tests.push(new Test("end", function (self) {
     self.expect(!regex.test("pq"));
 }));
 
-tests.push(new Test("either or", function (self) {
+tests.push(new Test("eitherLike orLike", function (self) {
     var regex = new RegExpBuilder()
         .start()
-        .either(function (r) { return r.exactly(1).of("p"); })
-        .or(function (r) { return r.exactly(2).of("q"); })
+        .eitherLike(function (r) { return r.exactly(1).of("p"); })
+        .orLike(function (r) { return r.exactly(2).of("q"); })
         .end()
         .getRegExp();
 
@@ -87,11 +87,11 @@ tests.push(new Test("either or", function (self) {
     self.expect(!regex.test("qqp"));
 }));
 
-tests.push(new Test("or chain", function (self) {
+tests.push(new Test("orLike chain", function (self) {
     var regex = new RegExpBuilder()
-        .either(function (r) { return r.exactly(1).of("p"); })
-        .or(function (r) { return r.exactly(1).of("q"); })
-        .or(function (r) { return r.exactly(1).of("r"); })
+        .eitherLike(function (r) { return r.exactly(1).of("p"); })
+        .orLike(function (r) { return r.exactly(1).of("q"); })
+        .orLike(function (r) { return r.exactly(1).of("r"); })
         .getRegExp();
 
     self.expect(regex.test("p"));
@@ -100,10 +100,10 @@ tests.push(new Test("or chain", function (self) {
     self.expect(!regex.test("s"));
 }));
 
-tests.push(new Test("eitherString orString", function (self) {
+tests.push(new Test("either or", function (self) {
     var regex = new RegExpBuilder()
-        .eitherString("p")
-        .orString("q")
+        .either("p")
+        .or("q")
         .getRegExp();
 
     self.expect(regex.test("p"));
@@ -251,20 +251,20 @@ tests.push(new Test("reluctantly", function (self) {
     self.expect(regex.exec("pprrrrpprrpp")[0] == "pprrrrpp");
 }));
 
-tests.push(new Test("behind", function (self) {
+tests.push(new Test("behindPattern", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("dart")
-        .behind(function (r) { return r.exactly(1).of("lang"); })
+        .behindPattern(function (r) { return r.exactly(1).of("lang"); })
         .getRegExp();
 
     self.expect(regex.exec("dartlang")[0] == "dart");
     self.expect(!regex.test("dartpqr"));
 }));
 
-tests.push(new Test("notBehind", function (self) {
+tests.push(new Test("notBehindPattern", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("dart")
-        .notBehind(function (r) { return r.exactly(1).of("pqr"); })
+        .notBehindPattern(function (r) { return r.exactly(1).of("pqr"); })
         .getRegExp();
 
     self.expect(regex.test("dartlang"));

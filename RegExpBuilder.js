@@ -102,17 +102,17 @@
         return self;
     }
 
-    self.either = function (r) {
+    self.eitherLike = function (r) {
         self._flushState();
         self._either = r(new RegExpBuilder()).getLiteral();
         return self;
     }
 
-    self.eitherString = function (s) {
-        return self.either(function (r) { return r.exactly(1).of(s); });
+    self.either = function (s) {
+        return self.eitherLike(function (r) { return r.exactly(1).of(s); });
     }
 
-    self.or = function (r) {
+    self.orLike = function (r) {
         var either = self._either;
         var or = r(new RegExpBuilder()).getLiteral();
         if (either == "") {
@@ -128,8 +128,8 @@
         return self;
     }
 
-    self.orString = function (s) {
-        return self.or(function (r) { return r.exactly(1).of(s); });
+    self.or = function (s) {
+        return self.orLike(function (r) { return r.exactly(1).of(s); });
     }
 
     self.exactly = function (n) {
@@ -186,13 +186,23 @@
         return self;
     }
 
-    self.behind = function (r) {
+    self.behindPattern = function (r) {
         self._behind = r(new RegExpBuilder()).getLiteral();
         return self;
     }
 
-    self.notBehind = function (r) {
+    self.behind = function (s) {
+        self._behind = new RegExpBuilder().exactly(1).of(s).getLiteral();
+        return self;
+    }
+
+    self.notBehindPattern = function (r) {
         self._notBehind = r(new RegExpBuilder()).getLiteral();
+        return self;
+    }
+
+    self.notBehind = function (s) {
+        self._notBehind = new RegExpBuilder().exactly(1).of(s).getLiteral();
         return self;
     }
 

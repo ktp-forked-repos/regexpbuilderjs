@@ -22,11 +22,11 @@ main() {
     expect(!regex.hasMatch("pq"));
   });
   
-  test("either or", () {
+  test("eitherLike orLike", () {
     var regex = new RegExpBuilder()
       .start()
-      .either((r) => r.exactly(1).of("p"))
-      .or((r) => r.exactly(2).of("q"))
+      .eitherLike((r) => r.exactly(1).of("p"))
+      .orLike((r) => r.exactly(2).of("q"))
       .end()
       .getRegExp();
     
@@ -36,11 +36,11 @@ main() {
     expect(!regex.hasMatch("qqp"));
   });
   
-  test("or chain", () {
+  test("orLike chain", () {
     var regex = new RegExpBuilder()
-      .either((r) => r.exactly(1).of("p"))
-      .or((r) => r.exactly(1).of("q"))
-      .or((r) => r.exactly(1).of("r"))
+      .eitherLike((r) => r.exactly(1).of("p"))
+      .orLike((r) => r.exactly(1).of("q"))
+      .orLike((r) => r.exactly(1).of("r"))
       .getRegExp();
     
     expect(regex.hasMatch("p"));
@@ -49,10 +49,10 @@ main() {
     expect(!regex.hasMatch("s"));
   });
   
-  test("orString", () {
+  test("or", () {
     var regex = new RegExpBuilder()
-      .eitherString("p")
-      .orString("q")
+      .either("p")
+      .or("q")
       .getRegExp();
     
     expect(regex.hasMatch("p"));
@@ -200,20 +200,20 @@ main() {
     expect(regex.stringMatch("pprrrrpprrpp") == "pprrrrpp");
   });
   
-  test("behind", () {
+  test("behindPattern", () {
     var regex = new RegExpBuilder()
       .exactly(1).of("dart")
-      .behind((r) => r.exactly(1).of("lang"))
+      .behindPattern((r) => r.exactly(1).of("lang"))
       .getRegExp();
     
     expect(regex.stringMatch("dartlang") == "dart");
     expect(!regex.hasMatch("dartpqr"));
   });
   
-  test("notBehind", () {
+  test("notBehindPattern", () {
     var regex = new RegExpBuilder()
       .exactly(1).of("dart")
-      .notBehind((r) => r.exactly(1).of("pqr"))
+      .notBehindPattern((r) => r.exactly(1).of("pqr"))
       .getRegExp();
     
     expect(regex.hasMatch("dartlang"));
