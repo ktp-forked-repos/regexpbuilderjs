@@ -206,11 +206,11 @@
     }
 
     self.some = function (s) {
-        return min(1).from(s);
+        return self.min(1).from(s);
     }
 
     self.maybe = function (s) {
-        return max(1).of(s);
+        return self.max(1).of(s);
     }
 
     self._escapeInsideCharacterClass = function (s) {
