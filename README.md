@@ -13,9 +13,9 @@ Here are a couple of examples using Javascript:
 ```
 var digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var regex = new RegExpBuilder()
-  .exactly(1).of("$")
-  .min(1).from(digits)
-  .exactly(1).of(".")
+  .a("$")
+  .some(digits)
+  .a(".")
   .exactly(2).from(digits)
   .getRegExp();
   
