@@ -218,7 +218,7 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder a(String s) {
+  RegExpBuilder then(String s) {
     return exactly(1).of(s);
   }
   

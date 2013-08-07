@@ -179,7 +179,7 @@ class RegExpBuilder:
         self._capture = True
         return self
 
-    def a(self, s):
+    def then(self, s):
         return self.exactly(1).of(s)
 
     def some(self, s):

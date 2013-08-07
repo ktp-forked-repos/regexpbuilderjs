@@ -201,7 +201,7 @@
         return self;
     }
 
-    self.a = function (s) {
+    self.then = function (s) {
         return self.exactly(1).of(s);
     }
 
