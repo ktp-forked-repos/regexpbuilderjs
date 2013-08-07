@@ -218,6 +218,18 @@ class RegExpBuilder {
     return this;
   }
   
+  RegExpBuilder a(String s) {
+    return exactly(1).of(s);
+  }
+  
+  RegExpBuilder some(List<String> s) {
+    return min(1).from(s);
+  }
+  
+  RegExpBuilder maybe(String s) {
+    return max(1).of(s);
+  }
+  
   String _escapeInsideCharacterClass(String s) {
     return _escapeSpecialCharacters(s, _specialCharactersInsideCharacterClass);
   }

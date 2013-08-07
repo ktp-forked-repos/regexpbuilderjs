@@ -230,6 +230,18 @@ public class RegExpBuilder {
   		_capture = true;
   		return this;
   	}
+  	
+  	public RegExpBuilder a(String s) {
+  		return exactly(1).of(s);
+  	}
+  	
+  	public RegExpBuilder some(char[] s) {
+  		return min(1).from(s);
+  	}
+  	
+  	public RegExpBuilder maybe(String s) {
+  		return max(1).of(s);
+  	}
   
   	private String _escapeInsideCharacterClass(String s) {
   		return _escapeSpecialCharacters(s, _specialCharactersInsideCharacterClass);

@@ -201,6 +201,18 @@
         return self;
     }
 
+    self.a = function (s) {
+        return self.exactly(1).of(s);
+    }
+
+    self.some = function (s) {
+        return min(1).from(s);
+    }
+
+    self.maybe = function (s) {
+        return max(1).of(s);
+    }
+
     self._escapeInsideCharacterClass = function (s) {
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass);
     }

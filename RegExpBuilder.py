@@ -178,6 +178,15 @@ class RegExpBuilder:
     def asGroup(self):
         self._capture = True
         return self
+
+    def a(self, s):
+        return self.exactly(1).of(s)
+
+    def some(self, s):
+        return self.min(1).from(s)
+
+    def maybe(self, s):
+        return self.max(1).of(s)
   
     def _escapeInsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)
