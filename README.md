@@ -13,9 +13,9 @@ Here are a couple of examples using Javascript:
 ```
 var digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var regex = new RegExpBuilder()
-  .a("$")
+  .then("$")
   .some(digits)
-  .a(".")
+  .then(".")
   .exactly(2).from(digits)
   .getRegExp();
   
@@ -35,7 +35,7 @@ var regex = new RegExpBuilder()
     .end()
     .getRegExp();
 
-self.expect(regex.test("pqqpqq")); // true
+regex.test("pqqpqq"); // true
 ```
 
 <h3>API documentation</h3>
