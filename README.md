@@ -35,7 +35,7 @@ var regex = new RegExpBuilder()
     .end()
     .getRegExp();
 
-self.expect(regex.test("pqqpqq")); // true
+regex.test("pqqpqq"); // true
 ```
 
 <h3>API documentation</h3>
