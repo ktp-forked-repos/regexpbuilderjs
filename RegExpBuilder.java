@@ -249,6 +249,10 @@ public class RegExpBuilder {
   		return min(1).from(s);
   	}
   	
+  	public RegExpBuilder maybeSome(char[] s) {
+  		return min(0).from(s);
+  	}
+  	
   	public RegExpBuilder maybe(String s) {
   		return max(1).of(s);
   	}

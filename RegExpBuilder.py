@@ -102,15 +102,15 @@ class RegExpBuilder:
   
     def eitherLike(self, r):
         self._flushState()
-        self._either = r(RegExpBuilder()).getLiteral()
+        self._either = r.getLiteral()
         return self
 
     def eitherString(self, s):
-        return self.eitherLike(lambda r: r.exactly(1).of(s))
+        return self.eitherLike(RegExpBuilder().exactly(1).of(s))
   
     def orLike(self, r):
         eitherLike = self._either
-        orLike = r(RegExpBuilder()).getLiteral()
+        orLike = r.getLiteral()
         if eitherLike == "":
             self._literal = self._literal[:-1]
             self._literal += "|(?:" + orLike + "))"
@@ -120,7 +120,7 @@ class RegExpBuilder:
         return self
 
     def orString(self, s):
-        return self.orLike(lambda r: r.exactly(1).of(s))
+        return self.orLike(RegExpBuilder().exactly(1).of(s))
   
     def exactly(self, n):
         self._flushState()
@@ -160,7 +160,7 @@ class RegExpBuilder:
 
   
     def like(self, r):
-        self._like = r(RegExpBuilder()).getLiteral()
+        self._like = r.getLiteral()
         return self
   
     def reluctantly(self):
@@ -168,11 +168,11 @@ class RegExpBuilder:
         return self
   
     def behind(self, r):
-        self._behind = r(RegExpBuilder()).getLiteral()
+        self._behind = r.getLiteral()
         return self
   
     def notBehind(self, r):
-        self._notBehind = r(RegExpBuilder()).getLiteral()
+        self._notBehind = r.getLiteral()
         return self
   
     def asGroup(self):
@@ -183,7 +183,10 @@ class RegExpBuilder:
         return self.exactly(1).of(s)
 
     def some(self, s):
-        return self.min(1).from(s)
+        return self.min(1).fromClass(s)
+
+    def maybeSome(self, s):
+        return self.min(0).fromClass(s)
 
     def maybe(self, s):
         return self.max(1).of(s)
@@ -192,10 +195,10 @@ class RegExpBuilder:
         return self.min(1).ofAny()
 
     def lineBreak(self):
-        return self.either("\r\n").or("\r").or("\n")
+        return self.eitherString("\r\n").orString("\r").orString("\n")
 
     def lineBreaks(self):
-        return self.like(lambda r : r.lineBreak())
+        return self.like(RegExpBuilder().lineBreak())
 
     def whitespace(self):
         return self.min(1).of("\s")
@@ -204,7 +207,7 @@ class RegExpBuilder:
         return self.exactly(1).of("\t")
 
     def tabs(self):
-        return self.like(lambda r : r.tab())
+        return self.like(RegExpBuilder().tab())
   
     def _escapeInsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)

@@ -23,8 +23,8 @@ class Test(unittest.TestCase):
     def test_eitherLike_orLike(self):
         regex = RegExpBuilder()
         regex.start()
-        regex.eitherLike(lambda r: r.exactly(1).of("p"))
-        regex.orLike(lambda r: r.exactly(2).of("q"))
+        regex.eitherLike(RegExpBuilder().exactly(1).of("p"))
+        regex.orLike(RegExpBuilder().exactly(2).of("q"))
         regex.end()
         regex = regex.getRegExp()
         
@@ -35,9 +35,9 @@ class Test(unittest.TestCase):
 
     def test_orLike_chain(self):
         regex = RegExpBuilder()
-        regex.eitherLike(lambda r: r.exactly(1).of("p"))
-        regex.orLike(lambda r: r.exactly(1).of("q"))
-        regex.orLike(lambda r: r.exactly(1).of("r"))
+        regex.eitherLike(RegExpBuilder().exactly(1).of("p"))
+        regex.orLike(RegExpBuilder().exactly(1).of("q"))
+        regex.orLike(RegExpBuilder().exactly(1).of("r"))
         regex = regex.getRegExp()
 
         self.assertTrue(regex.match("p") is not None)
@@ -162,7 +162,7 @@ class Test(unittest.TestCase):
         self.assertTrue(regex.match("mnq") is None)
   
     def test_like(self):
-        pattern = lambda r: r.min(1).of("p").min(2).of("q")
+        pattern = RegExpBuilder().min(1).of("p").min(2).of("q")
         
         regex = RegExpBuilder()
         regex.start()
@@ -185,7 +185,7 @@ class Test(unittest.TestCase):
     def test_behind(self):
         regex = RegExpBuilder()
         regex.exactly(1).of("dart")
-        regex.behind(lambda r: r.exactly(1).of("lang"))
+        regex.behind(RegExpBuilder().exactly(1).of("lang"))
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("dartlang").group() == "dart")
@@ -194,7 +194,7 @@ class Test(unittest.TestCase):
     def test_notBehind(self):
         regex = RegExpBuilder()
         regex.exactly(1).of("dart")
-        regex.notBehind(lambda r: r.exactly(1).of("pqr"))
+        regex.notBehind(RegExpBuilder().exactly(1).of("pqr"))
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("dartlang") is not None)

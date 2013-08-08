@@ -120,19 +120,19 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder eitherLike(Function r) {
+  RegExpBuilder eitherLike(RegExpBuilder r) {
     _flushState();
-    _either = r(new RegExpBuilder()).getLiteral();
+    _either = r.getLiteral();
     return this;
   }
   
   RegExpBuilder either(String s) {
-    return this.eitherLike((r) => r.exactly(1).of(s));
+    return this.eitherLike(new RegExpBuilder().exactly(1).of(s));
   }
   
-  RegExpBuilder orLike(Function r) {
+  RegExpBuilder orLike(RegExpBuilder r) {
     var either = _either;
-    var or = r(new RegExpBuilder()).getLiteral();
+    var or = r.getLiteral();
     if (either == "") {
       var lastOr = _literal.last();
       _literal[_literal.length - 1] = lastOr.substring(0, lastOr.length - 1);
@@ -146,7 +146,7 @@ class RegExpBuilder {
   }
   
   RegExpBuilder or(String s) {
-    return this.orLike((r) => r.exactly(1).of(s));
+    return this.orLike(new RegExpBuilder().exactly(1).of(s));
   }
   
   RegExpBuilder exactly(int n) {
@@ -193,8 +193,8 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder like(Function r) {
-    _like = r(new RegExpBuilder()).getLiteral();
+  RegExpBuilder like(RegExpBuilder r) {
+    _like = r.getLiteral();
     return this;
   }
   
@@ -203,8 +203,8 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder behindPattern(Function r) {
-    _behind = r(new RegExpBuilder()).getLiteral();
+  RegExpBuilder behindPattern(RegExpBuilder r) {
+    _behind = r.getLiteral();
     return this;
   }
   
@@ -213,8 +213,8 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder notBehindPattern(Function r) {
-    _notBehind = r(new RegExpBuilder()).getLiteral();
+  RegExpBuilder notBehindPattern(RegExpBuilder r) {
+    _notBehind = r.getLiteral();
     return this;
   }
   
@@ -236,6 +236,10 @@ class RegExpBuilder {
     return min(1).from(s);
   }
   
+  RegExpBuilder maybeSome(List<String> s) {
+    return min(0).from(s);
+  }
+  
   RegExpBuilder maybe(String s) {
     return max(1).of(s);
   }
@@ -249,7 +253,7 @@ class RegExpBuilder {
   }
   
   RegExpBuilder lineBreaks() {
-    return like((r) => r.lineBreak());
+    return like(new RegExpBuilder().lineBreak());
   }
   
   RegExpBuilder whitespace() {
@@ -261,7 +265,7 @@ class RegExpBuilder {
   }
   
   RegExpBuilder tabs() {
-    return like((r) => r.tab());
+    return like(new RegExpBuilder().tab());
   }
   
   String _escapeInsideCharacterClass(String s) {

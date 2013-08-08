@@ -219,6 +219,10 @@
         return self.min(1).from(s);
     }
 
+    self.maybeSome = function (s) {
+        return self.min(0).from(s);
+    }
+
     self.maybe = function (s) {
         return self.max(1).of(s);
     }
