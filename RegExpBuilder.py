@@ -187,6 +187,24 @@ class RegExpBuilder:
 
     def maybe(self, s):
         return self.max(1).of(s)
+
+    def anything(self):
+        return self.min(1).ofAny()
+
+    def lineBreak(self):
+        return self.either("\r\n").or("\r").or("\n")
+
+    def lineBreaks(self):
+        return self.like(lambda r : r.lineBreak())
+
+    def whitespace(self):
+        return self.min(1).of("\s")
+
+    def tab(self):
+        return self.exactly(1).of("\t")
+
+    def tabs(self):
+        return self.like(lambda r : r.tab())
   
     def _escapeInsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)

@@ -240,6 +240,30 @@ class RegExpBuilder {
     return max(1).of(s);
   }
   
+  RegExpBuilder anything() {
+    return min(1).ofAny();
+  }
+  
+  RegExpBuilder lineBreak() {
+    return either("\r\n").or("\r").or("\n");
+  }
+  
+  RegExpBuilder lineBreaks() {
+    return like((r) => r.lineBreak());
+  }
+  
+  RegExpBuilder whitespace() {
+    return min(1).of("\s");
+  }
+  
+  RegExpBuilder tab() {
+    return exactly(1).of("\t");
+  }
+  
+  RegExpBuilder tabs() {
+    return like((r) => r.tab());
+  }
+  
   String _escapeInsideCharacterClass(String s) {
     return _escapeSpecialCharacters(s, _specialCharactersInsideCharacterClass);
   }

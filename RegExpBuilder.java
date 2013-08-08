@@ -252,6 +252,30 @@ public class RegExpBuilder {
   	public RegExpBuilder maybe(String s) {
   		return max(1).of(s);
   	}
+  	
+  	public RegExpBuilder anything() {
+  		return min(1).ofAny();
+  	}
+  	
+  	public RegExpBuilder lineBreak() {
+  		return either("\r\n").or("\r").or("\n");
+  	}
+  	
+  	public RegExpBuilder lineBreaks() {
+  		return like(new RegExpBuilder().lineBreak());
+  	}
+  	
+  	public RegExpBuilder whitespace() {
+  		return min(1).of("\\s");
+  	}
+  	
+  	public RegExpBuilder tab() {
+  		return exactly(1).of("\t");
+  	}
+  	
+  	public RegExpBuilder tabs() {
+  		return like(new RegExpBuilder().tab());
+  	}
   
   	private String _escapeInsideCharacterClass(String s) {
   		return _escapeSpecialCharacters(s, _specialCharactersInsideCharacterClass);

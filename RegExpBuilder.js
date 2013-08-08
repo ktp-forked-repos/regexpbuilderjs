@@ -223,6 +223,33 @@
         return self.max(1).of(s);
     }
 
+    self.anything = function () {
+        return self.min(1).ofAny();
+    }
+
+    self.lineBreak = function () {
+        return self
+            .either("\r\n")
+            .or("\r")
+            .or("\n");
+    }
+
+    self.lineBreaks = function () {
+        return self.like(function (r) { return r.lineBreak(); });
+    }
+
+    self.whitespace = function () {
+        return self.min(1).of("\s");
+    }
+
+    self.tab = function () {
+        return self.exactly(1).of("\t");
+    }
+
+    self.tabs = function () {
+        return self.like(function (r) { return r.tab(); });
+    }
+
     self._escapeInsideCharacterClass = function (s) {
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass);
     }
