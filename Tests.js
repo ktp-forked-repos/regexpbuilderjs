@@ -76,8 +76,8 @@ tests.push(new Test("end", function (self) {
 tests.push(new Test("eitherLike orLike", function (self) {
     var regex = new RegExpBuilder()
         .start()
-        .eitherLike(function (r) { return r.exactly(1).of("p"); })
-        .orLike(function (r) { return r.exactly(2).of("q"); })
+        .eitherLike(new RegExpBuilder().exactly(1).of("p"))
+        .orLike(new RegExpBuilder().exactly(2).of("q"))
         .end()
         .getRegExp();
 
@@ -89,9 +89,9 @@ tests.push(new Test("eitherLike orLike", function (self) {
 
 tests.push(new Test("orLike chain", function (self) {
     var regex = new RegExpBuilder()
-        .eitherLike(function (r) { return r.exactly(1).of("p"); })
-        .orLike(function (r) { return r.exactly(1).of("q"); })
-        .orLike(function (r) { return r.exactly(1).of("r"); })
+        .eitherLike(new RegExpBuilder().exactly(1).of("p"))
+        .orLike(new RegExpBuilder().exactly(1).of("q"))
+        .orLike(new RegExpBuilder().exactly(1).of("r"))
         .getRegExp();
 
     self.expect(regex.test("p"));
@@ -227,9 +227,9 @@ tests.push(new Test("notFrom", function (self) {
 }));
 
 tests.push(new Test("like", function (self) {
-    var pattern = function (r) {
-        return r.min(1).of("p").min(2).of("q");
-    }
+    var pattern = new RegExpBuilder()
+        .min(1).of("p")
+        .min(2).of("q");
 
     var regex = new RegExpBuilder()
         .start()
@@ -254,7 +254,7 @@ tests.push(new Test("reluctantly", function (self) {
 tests.push(new Test("behindPattern", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("dart")
-        .behindPattern(function (r) { return r.exactly(1).of("lang"); })
+        .behindPattern(new RegExpBuilder().exactly(1).of("lang"))
         .getRegExp();
 
     self.expect(regex.exec("dartlang")[0] == "dart");
@@ -264,7 +264,7 @@ tests.push(new Test("behindPattern", function (self) {
 tests.push(new Test("notBehindPattern", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("dart")
-        .notBehindPattern(function (r) { return r.exactly(1).of("pqr"); })
+        .notBehindPattern(new RegExpBuilder().exactly(1).of("pqr"))
         .getRegExp();
 
     self.expect(regex.test("dartlang"));

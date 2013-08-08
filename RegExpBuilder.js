@@ -104,17 +104,17 @@
 
     self.eitherLike = function (r) {
         self._flushState();
-        self._either = r(new RegExpBuilder()).getLiteral();
+        self._either = r.getLiteral();
         return self;
     }
 
     self.either = function (s) {
-        return self.eitherLike(function (r) { return r.exactly(1).of(s); });
+        return self.eitherLike(new RegExpBuilder().exactly(1).of(s));
     }
 
     self.orLike = function (r) {
         var either = self._either;
-        var or = r(new RegExpBuilder()).getLiteral();
+        var or = r.getLiteral();
         if (either == "") {
             var lastOr = self._literal[self._literal.length - 1];
             lastOr = lastOr.substring(0, lastOr.length - 1);
@@ -129,7 +129,7 @@
     }
 
     self.or = function (s) {
-        return self.orLike(function (r) { return r.exactly(1).of(s); });
+        return self.orLike(new RegExpBuilder().exactly(1).of(s));
     }
 
     self.exactly = function (n) {
@@ -177,7 +177,7 @@
     }
 
     self.like = function (r) {
-        self._like = r(new RegExpBuilder()).getLiteral();
+        self._like = r.getLiteral();
         return self;
     }
 
@@ -187,7 +187,7 @@
     }
 
     self.behindPattern = function (r) {
-        self._behind = r(new RegExpBuilder()).getLiteral();
+        self._behind = r.getLiteral();
         return self;
     }
 
@@ -197,7 +197,7 @@
     }
 
     self.notBehindPattern = function (r) {
-        self._notBehind = r(new RegExpBuilder()).getLiteral();
+        self._notBehind = r.getLiteral();
         return self;
     }
 
@@ -235,7 +235,7 @@
     }
 
     self.lineBreaks = function () {
-        return self.like(function (r) { return r.lineBreak(); });
+        return self.like(new RegExpBuilder().lineBreak());
     }
 
     self.whitespace = function () {
@@ -247,7 +247,7 @@
     }
 
     self.tabs = function () {
-        return self.like(function (r) { return r.tab(); });
+        return self.like(new RegExpBuilder().tab());
     }
 
     self._escapeInsideCharacterClass = function (s) {

@@ -25,9 +25,9 @@ regex.test("$10.00")); // true
 <h3>Nested patterns</h3>
 
 ```
-var pattern = function (r) {
-    return r.min(1).of("p").min(2).of("q");
-}
+var pattern = new RegExpBuilder()
+	.min(1).of("p")
+	.min(2).of("q");
 
 var regex = new RegExpBuilder()
     .exactly(2).like(pattern)
