@@ -30,9 +30,7 @@ var pattern = function (r) {
 }
 
 var regex = new RegExpBuilder()
-    .start()
     .exactly(2).like(pattern)
-    .end()
     .getRegExp();
 
 regex.test("pqqpqq"); // true
