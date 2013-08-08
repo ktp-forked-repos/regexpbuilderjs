@@ -37,4 +37,4 @@ regex.test("pqqpqq"); // true
 ```
 
 <h3>API documentation</h3>
-RegExpbuilder can represent literally every possible regular expression using methods such as either(), or(), behind(), asGroup() and so on. You can find the API documentation for each language <a href="https://github.com/thebinarysearchtree/RegExpBuilder/wiki">here</a>.
+RegExpBuilder can represent literally every possible regular expression using methods such as either(), or(), behind(), asGroup() and so on. You can find the API documentation for each language <a href="https://github.com/thebinarysearchtree/RegExpBuilder/wiki">here</a>.
