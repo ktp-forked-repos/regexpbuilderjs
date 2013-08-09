@@ -91,15 +91,25 @@
         return self;
     }
 
-    self.start = function () {
+    self.startOfInput = function () {
         self._literal.push("(?:^)");
         return self;
     }
 
-    self.end = function () {
+    self.startOfLine = function () {
+        self.multiLine();
+        return self.startOfInput();
+    }
+
+    self.endOfInput = function () {
         self._flushState();
         self._literal.push("(?:$)");
         return self;
+    }
+
+    self.endOfLine = function () {
+        self.multiLine();
+        return self.endOfInput();
     }
 
     self.eitherLike = function (r) {
@@ -252,6 +262,10 @@
 
     self.tabs = function () {
         return self.like(new RegExpBuilder().tab());
+    }
+
+    self.oneOrMore = function (s) {
+        return min(1).of(s);
     }
 
     self._escapeInsideCharacterClass = function (s) {

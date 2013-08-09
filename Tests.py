@@ -2,19 +2,19 @@ import unittest
 from RegExpBuilder import RegExpBuilder
 
 class Test(unittest.TestCase):
-    def test_start(self):
+    def test_startOfLine(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(1).of("p")
         regex = regex.getRegExp()
     
         self.assertTrue(regex.match("p") is not None)
         self.assertTrue(regex.match("qp") is None)
   
-    def test_end(self):
+    def test_endOfLine(self):
         regex = RegExpBuilder()
         regex.exactly(1).of("p")
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("p") is not None)
@@ -22,10 +22,10 @@ class Test(unittest.TestCase):
   
     def test_eitherLike_orLike(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.eitherLike(RegExpBuilder().exactly(1).of("p"))
         regex.orLike(RegExpBuilder().exactly(2).of("q"))
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("p") is not None)
@@ -57,9 +57,9 @@ class Test(unittest.TestCase):
   
     def test_exactly(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(3).of("p")
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("ppp") is not None)
@@ -68,9 +68,9 @@ class Test(unittest.TestCase):
   
     def test_min(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.min(2).of("p")
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("pp") is not None)
@@ -80,9 +80,9 @@ class Test(unittest.TestCase):
   
     def test_max(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.max(3).of("p")
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("p") is not None)
@@ -93,9 +93,9 @@ class Test(unittest.TestCase):
   
     def test_min_max(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.min(3).max(7).of("p")
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("ppp") is not None)
@@ -108,9 +108,9 @@ class Test(unittest.TestCase):
   
     def test_of(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(2).of("p p p ")
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("p p p p p p ") is not None)
@@ -118,20 +118,20 @@ class Test(unittest.TestCase):
   
     def test_ofAny(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(3).ofAny()
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("pqr") is not None)
 
     def test_ofGroup(self):
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(3).of("p").asGroup()
         regex.exactly(1).of("q")
         regex.exactly(1).ofGroup(1)
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("pppqppp") is not None)
@@ -139,9 +139,9 @@ class Test(unittest.TestCase):
     def test_fromClass(self):
         someLetters = ["p", "q", "r"]
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(3).fromClass(someLetters)
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("ppp") is not None)
@@ -153,9 +153,9 @@ class Test(unittest.TestCase):
     def test_notFromClass(self):
         someLetters = ["p", "q", "r"]
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(3).notFromClass(someLetters)
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("lmn") is not None)
@@ -165,9 +165,9 @@ class Test(unittest.TestCase):
         pattern = RegExpBuilder().min(1).of("p").min(2).of("q")
         
         regex = RegExpBuilder()
-        regex.start()
+        regex.startOfLine()
         regex.exactly(2).like(pattern)
-        regex.end()
+        regex.endOfLine()
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("pqqpqq") is not None)

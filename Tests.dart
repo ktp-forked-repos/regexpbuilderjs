@@ -2,9 +2,9 @@
 #source('RegExpBuilder.dart');
 
 main() {
-  test("start", () {
+  test("startOfLine", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(1).of("p")
       .getRegExp();
     
@@ -12,10 +12,10 @@ main() {
     expect(!regex.hasMatch("qp"));
   });
   
-  test("end", () {
+  test("endOfLine", () {
     var regex = new RegExpBuilder()
       .exactly(1).of("p")
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("p"));
@@ -24,10 +24,10 @@ main() {
   
   test("eitherLike orLike", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .eitherLike(new RegExpBuilder().exactly(1).of("p"))
       .orLike(new RegExpBuilder().exactly(2).of("q"))
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("p"));
@@ -62,9 +62,9 @@ main() {
   
   test("exactly", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(3).of("p")
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("ppp"));
@@ -74,9 +74,9 @@ main() {
   
   test("min", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .min(2).of("p")
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("pp"));
@@ -87,9 +87,9 @@ main() {
   
   test("max", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .max(3).of("p")
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("p"));
@@ -101,9 +101,9 @@ main() {
   
   test("min max", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .min(3).max(7).of("p")
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("ppp"));
@@ -117,9 +117,9 @@ main() {
   
   test("of", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(2).of("p p p ")
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("p p p p p p "));
@@ -128,9 +128,9 @@ main() {
   
   test("ofAny", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(3).ofAny()
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("pqr"));
@@ -138,11 +138,11 @@ main() {
   
   test("ofGroup", () {
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(3).of("p").asGroup()
       .exactly(1).of("q")
       .exactly(1).ofGroup(1)
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("pppqppp"));
@@ -151,9 +151,9 @@ main() {
   test("from", () {
     var someLetters = ["p", "q", "r"];
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(3).from(someLetters)
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("ppp"));
@@ -166,9 +166,9 @@ main() {
   test("notFrom", () {
     var someLetters = ["p", "q", "r"];
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(3).notFrom(someLetters)
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("lmn"));
@@ -181,9 +181,9 @@ main() {
       .min(2).of("q");
     
     var regex = new RegExpBuilder()
-      .start()
+      .startOfLine()
       .exactly(2).like(pattern)
-      .end()
+      .endOfLine()
       .getRegExp();
     
     expect(regex.hasMatch("pqqpqq"));

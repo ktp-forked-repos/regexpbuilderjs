@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 import org.junit.*;
 
 public class Tests {
-	@Test public void start() {
+	@Test public void startOfLine() {
 		Pattern regex = new RegExpBuilder()
-			.start()
+			.startOfLine()
 			.exactly(1).of("p")
 			.getRegExp();
 	    
@@ -19,10 +19,10 @@ public class Tests {
 	    assertTrue(!regex.matcher("qp").matches());
 	}
 	  
-	@Test public void end() {
+	@Test public void endOfLine() {
 		Pattern regex = new RegExpBuilder()
     		.exactly(1).of("p")
-    		.end()
+    		.endOfLine()
     		.getRegExp();
 	    
 	    assertTrue(regex.matcher("p").matches());
@@ -33,10 +33,10 @@ public class Tests {
 		RegExpBuilder p1 = new RegExpBuilder().exactly(1).of("p");
 		RegExpBuilder p2 = new RegExpBuilder().exactly(2).of("q");
 		Pattern regex = new RegExpBuilder()
-  			.start()
+  			.startOfLine()
   			.either(p1)
   			.or(p2)
-  			.end()
+  			.endOfLine()
   			.getRegExp();
 	    
 		assertTrue(regex.matcher("p").matches());
@@ -74,9 +74,9 @@ public class Tests {
 	  
 	@Test public void exactly() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(3).of("p")
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("ppp").matches());
@@ -86,9 +86,9 @@ public class Tests {
 	  
 	@Test public void min() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.min(2).of("p")
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("pp").matches());
@@ -99,9 +99,9 @@ public class Tests {
 	  
 	@Test public void max() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.max(3).of("p")
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("p").matches());
@@ -113,9 +113,9 @@ public class Tests {
 	  
 	@Test public void minMax() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.min(3).max(7).of("p")
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("ppp").matches());
@@ -129,9 +129,9 @@ public class Tests {
 	  
 	@Test public void of() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(2).of("p p p ")
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("p p p p p p ").matches());
@@ -140,9 +140,9 @@ public class Tests {
 	  
 	@Test public void ofAny() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(3).ofAny()
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("pqr").matches());
@@ -150,11 +150,11 @@ public class Tests {
 	
 	@Test public void ofGroup() {
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(3).of("p").asGroup()
 	    	.exactly(1).of("q")
 	    	.exactly(1).ofGroup(1)
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("pppqppp").matches());
@@ -163,9 +163,9 @@ public class Tests {
 	@Test public void from() {
 	    char[] someLetters = { 'p', 'q', 'r' };
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(3).from(someLetters)
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("ppp").matches());
@@ -178,9 +178,9 @@ public class Tests {
 	@Test public void notFrom() {
 	    char[] someLetters = { 'p', 'q', 'r' };
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(3).notFrom(someLetters)
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("lmn").matches());
@@ -193,9 +193,9 @@ public class Tests {
 	        .min(2).of("q");
 	    
 	    Pattern regex = new RegExpBuilder()
-	    	.start()
+	    	.startOfLine()
 	    	.exactly(2).like(r)
-	    	.end()
+	    	.endOfLine()
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("pqqpqq").matches());

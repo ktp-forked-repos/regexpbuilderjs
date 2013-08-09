@@ -53,9 +53,9 @@ var Test = function (name, test) {
 }
 
 var tests = [];
-tests.push(new Test("start", function (self) {
+tests.push(new Test("startOfLine", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(1).of("p")
         .getRegExp();
 
@@ -63,10 +63,10 @@ tests.push(new Test("start", function (self) {
     self.expect(!regex.test("qp"));
 }));
 
-tests.push(new Test("end", function (self) {
+tests.push(new Test("endOfLine", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("p")
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("p"));
@@ -75,10 +75,10 @@ tests.push(new Test("end", function (self) {
 
 tests.push(new Test("eitherLike orLike", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .eitherLike(new RegExpBuilder().exactly(1).of("p"))
         .orLike(new RegExpBuilder().exactly(2).of("q"))
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("p"));
@@ -113,9 +113,9 @@ tests.push(new Test("either or", function (self) {
 
 tests.push(new Test("exactly", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(3).of("p")
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("ppp"));
@@ -125,9 +125,9 @@ tests.push(new Test("exactly", function (self) {
 
 tests.push(new Test("min", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .min(2).of("p")
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("pp"));
@@ -138,9 +138,9 @@ tests.push(new Test("min", function (self) {
 
 tests.push(new Test("max", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .max(3).of("p")
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("p"));
@@ -152,9 +152,9 @@ tests.push(new Test("max", function (self) {
 
 tests.push(new Test("min max", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .min(3).max(7).of("p")
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("ppp"));
@@ -168,9 +168,9 @@ tests.push(new Test("min max", function (self) {
 
 tests.push(new Test("of", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(2).of("p p p ")
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("p p p p p p "));
@@ -179,9 +179,9 @@ tests.push(new Test("of", function (self) {
 
 tests.push(new Test("ofAny", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(3).ofAny()
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("pqr"));
@@ -189,11 +189,11 @@ tests.push(new Test("ofAny", function (self) {
 
 tests.push(new Test("ofGroup", function (self) {
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(3).of("p").asGroup()
         .exactly(1).of("q")
         .exactly(1).ofGroup(1)
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("pppqppp"));
@@ -202,9 +202,9 @@ tests.push(new Test("ofGroup", function (self) {
 tests.push(new Test("from", function (self) {
     var someLetters = ["p", "q", "r"];
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(3).from(someLetters)
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("ppp"));
@@ -217,9 +217,9 @@ tests.push(new Test("from", function (self) {
 tests.push(new Test("notFrom", function (self) {
     var someLetters = ["p", "q", "r"];
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(3).notFrom(someLetters)
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("lmn"));
@@ -232,9 +232,9 @@ tests.push(new Test("like", function (self) {
         .min(2).of("q");
 
     var regex = new RegExpBuilder()
-        .start()
+        .startOfLine()
         .exactly(2).like(pattern)
-        .end()
+        .endOfLine()
         .getRegExp();
 
     self.expect(regex.test("pqqpqq"));

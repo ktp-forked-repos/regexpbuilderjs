@@ -109,15 +109,25 @@ class RegExpBuilder {
     return this;
   }
   
-  RegExpBuilder start() {
+  RegExpBuilder startOfInput() {
     _literal.add("(?:^)");
     return this;
   }
   
-  RegExpBuilder end() {
+  RegExpBuilder startOfLine() {
+    multiLine();
+    return startOfInput();
+  }
+  
+  RegExpBuilder endOfInput() {
     _flushState();
     _literal.add(@"(?:$)");
     return this;
+  }
+  
+  RegExpBuilder endOfLine() {
+    multiLine();
+    return endOfInput();
   }
   
   RegExpBuilder eitherLike(RegExpBuilder r) {
@@ -266,6 +276,10 @@ class RegExpBuilder {
   
   RegExpBuilder tabs() {
     return like(new RegExpBuilder().tab());
+  }
+  
+  RegExpBuilder oneOrMore(String s) {
+    return min(1).of(s);
   }
   
   String _escapeInsideCharacterClass(String s) {
