@@ -290,10 +290,6 @@ public class RegExpBuilder {
   	public RegExpBuilder tabs() {
   		return like(new RegExpBuilder().tab());
   	}
-  	
-  	public RegExpBuilder oneOrMore(String s) {
-  		return min(1).of(s);
-  	}
   
   	private String _escapeInsideCharacterClass(String s) {
   		return _escapeSpecialCharacters(s, _specialCharactersInsideCharacterClass);

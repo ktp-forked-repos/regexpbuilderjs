@@ -216,13 +216,9 @@ class RegExpBuilder:
 
     def tabs(self):
         return self.like(RegExpBuilder().tab())
-
-    def oneOrMore(self, s):
-        return min(1).of(s)
   
     def _escapeInsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)
-
 
     def _escapeOutsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersOutsideCharacterClass)

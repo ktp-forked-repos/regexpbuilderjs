@@ -278,10 +278,6 @@ class RegExpBuilder {
     return like(new RegExpBuilder().tab());
   }
   
-  RegExpBuilder oneOrMore(String s) {
-    return min(1).of(s);
-  }
-  
   String _escapeInsideCharacterClass(String s) {
     return _escapeSpecialCharacters(s, _specialCharactersInsideCharacterClass);
   }

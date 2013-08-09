@@ -264,10 +264,6 @@
         return self.like(new RegExpBuilder().tab());
     }
 
-    self.oneOrMore = function (s) {
-        return min(1).of(s);
-    }
-
     self._escapeInsideCharacterClass = function (s) {
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass);
     }
