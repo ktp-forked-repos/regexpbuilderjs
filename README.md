@@ -32,7 +32,8 @@ var pattern = new RegExpBuilder()
   .of("q");
 
 var regex = new RegExpBuilder()
-  .exactly(2).like(pattern)
+  .exactly(2)
+  .like(pattern)
   .getRegExp();
 
 regex.test("pqqpqq"); // true
