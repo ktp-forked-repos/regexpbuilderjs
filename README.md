@@ -26,8 +26,10 @@ regex.test("$10.00")); // true
 
 ```
 var pattern = new RegExpBuilder()
-  .min(1).of("p")
-  .min(2).of("q");
+  .min(1)
+  .of("p")
+  .min(2)
+  .of("q");
 
 var regex = new RegExpBuilder()
   .exactly(2).like(pattern)
