@@ -165,7 +165,6 @@ class RegExpBuilder:
     def notFromClass(self, s):
         self._notFrom = self._escapeInsideCharacterClass("".join(s))
         return self
-
   
     def like(self, r):
         self._like = r.getLiteral()
@@ -209,13 +208,49 @@ class RegExpBuilder:
         return self.like(RegExpBuilder().lineBreak())
 
     def whitespace(self):
-        return self.min(1).of("\s")
+        if self._min == -1 and self._max == -1:
+            return self.exactly(1).of("\s")
+        self._like = "\s"
+        return self
 
     def tab(self):
         return self.exactly(1).of("\t")
 
     def tabs(self):
         return self.like(RegExpBuilder().tab())
+
+    def digit(self):
+        return self.exactly(1).of("\d")
+
+    def digits(self):
+        return self.like(RegExpBuilder().digit())
+
+    def letter(self):
+        self.exactly(1)
+        self._from = "A-Za-z"
+        return self
+
+    def letters(self):
+        self._from = "A-Za-z"
+        return self
+
+    def lowerCaseLetter(self):
+        self.exactly(1)
+        self._from = "a-z"
+        return self
+
+    def lowerCaseLetters(self):
+        self._from = "a-z"
+        return self
+
+    def upperCaseLetter(self):
+        self.exactly(1)
+        self._from = "A-Z"
+        return self
+
+    def upperCaseLetters(self):
+        self._from = "A-Z"
+        return self
   
     def _escapeInsideCharacterClass(self, s):
         return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)

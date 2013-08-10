@@ -280,7 +280,11 @@ public class RegExpBuilder {
   	}
   	
   	public RegExpBuilder whitespace() {
-  		return min(1).of("\\s");
+  		if (_min == -1 && _max == -1) {
+  			return exactly(1).of("\\s");
+  		}
+  		_like = "\\s";
+  		return this;
   	}
   	
   	public RegExpBuilder tab() {
@@ -289,6 +293,47 @@ public class RegExpBuilder {
   	
   	public RegExpBuilder tabs() {
   		return like(new RegExpBuilder().tab());
+  	}
+  	
+  	public RegExpBuilder digit() {
+  		return exactly(1).of("\\d");
+  	}
+  	
+  	public RegExpBuilder digits() {
+  		return like(new RegExpBuilder().digit());
+  	}
+  	
+  	public RegExpBuilder letter() {
+  		exactly(1);
+  		_from = "A-Za-z";
+  		return this;
+  	}
+  	
+  	public RegExpBuilder letters() {
+  		_from = "A-Za-z";
+  		return this;
+  	}
+  	
+  	public RegExpBuilder lowerCaseLetter() {
+  		exactly(1);
+  		_from = "a-z";
+  		return this;
+  	}
+  	
+  	public RegExpBuilder lowerCaseLetters() {
+  		_from = "a-z";
+  		return this;
+  	}
+  	
+  	public RegExpBuilder upperCaseLetter() {
+  		exactly(1);
+  		_from = "A-Z";
+  		return this;
+  	}
+  	
+  	public RegExpBuilder upperCaseLetters() {
+  		_from = "A-Z";
+  		return this;
   	}
   
   	private String _escapeInsideCharacterClass(String s) {

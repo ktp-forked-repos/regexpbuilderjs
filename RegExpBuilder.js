@@ -253,7 +253,11 @@
     }
 
     self.whitespace = function () {
-        return self.min(1).of("\s");
+        if (self._min == -1 && self._max == -1) {
+            return self.exactly(1).of("\s");
+        }
+        self._like = "\s";
+        return self;
     }
 
     self.tab = function () {
@@ -262,6 +266,47 @@
 
     self.tabs = function () {
         return self.like(new RegExpBuilder().tab());
+    }
+
+    self.digit = function () {
+        return self.exactly(1).of("\d");
+    }
+
+    self.digits = function () {
+        return self.like(new RegExpBuilder().digit());
+    }
+
+    self.letter = function () {
+        self.exactly(1);
+        self._from = "A-Za-z";
+        return self;
+    }
+
+    self.letters = function () {
+        self._from = "A-Za-z";
+        return self;
+    }
+
+    self.lowerCaseLetter = function () {
+        self.exactly(1);
+        self._from = "a-z";
+        return self;
+    }
+
+    self.lowerCaseLetters = function () {
+        self._from = "a-z";
+        return self;
+    }
+
+    self.upperCaseLetter = function () {
+        self.exactly(1);
+        self._from = "A-Z";
+        return self;
+    }
+
+    self.upperCaseLetters = function () {
+        self._from = "A-Z";
+        return self;
     }
 
     self._escapeInsideCharacterClass = function (s) {
