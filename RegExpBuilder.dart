@@ -268,7 +268,7 @@ class RegExpBuilder {
   
   RegExpBuilder whitespace() {
     if (_min == -1 && _max == -1) {
-      return min(1).of("\s");
+      return exactly(1).of("\s");
     }
     _like = "\s";
     return this;
