@@ -16,7 +16,8 @@ var regex = new RegExpBuilder()
   .then("$")
   .some(digits)
   .then(".")
-  .exactly(2).from(digits)
+  .exactly(2)
+  .from(digits)
   .getRegExp();
   
 regex.test("$10.00")); // true
