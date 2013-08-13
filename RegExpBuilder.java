@@ -19,8 +19,8 @@ public class RegExpBuilder {
 	private String _from;
 	private String _notFrom;
 	private String _like;
-	private String _behind;
-	private String _notBehind;
+	private String _ahead;
+	private String _notAhead;
 	private String _either;
 	private Boolean _reluctant;
 	private Boolean _capture;
@@ -44,8 +44,8 @@ public class RegExpBuilder {
 		_from = "";
 		_notFrom = "";
 		_like = "";
-		_behind = "";
-		_notBehind = "";
+		_ahead = "";
+		_notAhead = "";
 		_either = "";
 		_reluctant = false;
 		_capture = false;
@@ -57,8 +57,8 @@ public class RegExpBuilder {
   			String quantityLiteral = getQuantityLiteral();
   			String characterLiteral = getCharacterLiteral();
   			String reluctantLiteral = _reluctant ? "?" : "";
-  			String behindLiteral = _behind != "" ? "(?=" + _behind + ")" : "";
-  			String notBehindLiteral = _notBehind != "" ? "(?!" + _notBehind + ")" : "";
+  			String behindLiteral = _ahead != "" ? "(?=" + _ahead + ")" : "";
+  			String notBehindLiteral = _notAhead != "" ? "(?!" + _notAhead + ")" : "";
   			_literal.append("(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")" + behindLiteral + notBehindLiteral);
   			_clear();
     	}
@@ -226,23 +226,13 @@ public class RegExpBuilder {
   		return this;
   	}
   
-  	public RegExpBuilder behind(RegExpBuilder r) {
-  		_behind = r.getLiteral();
-  		return this;
-  	}
-  	
-  	public RegExpBuilder behind(String s) {
-  		_behind = new RegExpBuilder().exactly(1).of(s).getLiteral();
+  	public RegExpBuilder ahead(RegExpBuilder r) {
+  		_ahead = r.getLiteral();
   		return this;
   	}
   
-  	public RegExpBuilder notBehind(RegExpBuilder r) {
-  		_notBehind = r.getLiteral();
-  		return this;
-  	}
-  	
-  	public RegExpBuilder notBehind(String s) {
-  		_notBehind = new RegExpBuilder().exactly(1).of(s).getLiteral();
+  	public RegExpBuilder notAhead(RegExpBuilder r) {
+  		_notAhead = r.getLiteral();
   		return this;
   	}
   
@@ -333,6 +323,18 @@ public class RegExpBuilder {
   	
   	public RegExpBuilder upperCaseLetters() {
   		_from = "A-Z";
+  		return this;
+  	}
+  	
+  	public RegExpBuilder append(RegExpBuilder r) {
+  		exactly(1);
+  		_like = r.getLiteral();
+  		return this;
+  	}
+  	
+  	public RegExpBuilder optional(RegExpBuilder r) {
+  		max(1);
+  		_like = r.getLiteral();
   		return this;
   	}
   

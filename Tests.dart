@@ -200,20 +200,20 @@ main() {
     expect(regex.stringMatch("pprrrrpprrpp") == "pprrrrpp");
   });
   
-  test("behindPattern", () {
+  test("ahead", () {
     var regex = new RegExpBuilder()
       .exactly(1).of("dart")
-      .behindPattern(new RegExpBuilder().exactly(1).of("lang"))
+      .ahead(new RegExpBuilder().exactly(1).of("lang"))
       .getRegExp();
     
     expect(regex.stringMatch("dartlang") == "dart");
     expect(!regex.hasMatch("dartpqr"));
   });
   
-  test("notBehindPattern", () {
+  test("notAhead", () {
     var regex = new RegExpBuilder()
       .exactly(1).of("dart")
-      .notBehindPattern(new RegExpBuilder().exactly(1).of("pqr"))
+      .notAhead(new RegExpBuilder().exactly(1).of("pqr"))
       .getRegExp();
     
     expect(regex.hasMatch("dartlang"));

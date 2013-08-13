@@ -17,8 +17,8 @@
         self._from = "";
         self._notFrom = "";
         self._like = "";
-        self._behind = "";
-        self._notBehind = "";
+        self._ahead = "";
+        self._notAhead = "";
         self._either = "";
         self._reluctant = false;
         self._capture = false;
@@ -32,8 +32,8 @@
             var quantityLiteral = self._getQuantityLiteral();
             var characterLiteral = self._getCharacterLiteral();
             var reluctantLiteral = self._reluctant ? "?" : "";
-            var behindLiteral = self._behind != "" ? "(?=" + self._behind + ")" : "";
-            var notBehindLiteral = self._notBehind != "" ? "(?!" + self._notBehind + ")" : "";
+            var behindLiteral = self._ahead != "" ? "(?=" + self._ahead + ")" : "";
+            var notBehindLiteral = self._notAhead != "" ? "(?!" + self._notAhead + ")" : "";
             self._literal.push("(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")" + behindLiteral + notBehindLiteral);
             self._clear();
         }
@@ -196,23 +196,13 @@
         return self;
     }
 
-    self.behindPattern = function (r) {
-        self._behind = r.getLiteral();
+    self.ahead = function (r) {
+        self._ahead = r.getLiteral();
         return self;
     }
 
-    self.behind = function (s) {
-        self._behind = new RegExpBuilder().exactly(1).of(s).getLiteral();
-        return self;
-    }
-
-    self.notBehindPattern = function (r) {
-        self._notBehind = r.getLiteral();
-        return self;
-    }
-
-    self.notBehind = function (s) {
-        self._notBehind = new RegExpBuilder().exactly(1).of(s).getLiteral();
+    self.notAhead = function (r) {
+        self._notAhead = r.getLiteral();
         return self;
     }
 
@@ -306,6 +296,18 @@
 
     self.upperCaseLetters = function () {
         self._from = "A-Z";
+        return self;
+    }
+
+    self.append = function (r) {
+        self.exactly(1);
+        self._like = r.getLiteral();
+        return self;
+    }
+
+    self.optional = function (r) {
+        self.max(1);
+        self._like = r.getLiteral();
         return self;
     }
 

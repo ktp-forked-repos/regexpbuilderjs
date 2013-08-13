@@ -182,19 +182,19 @@ class Test(unittest.TestCase):
         
         self.assertTrue(regex.match("pprrrrpprrpp").group() == "pprrrrpp")
   
-    def test_behind(self):
+    def test_ahead(self):
         regex = RegExpBuilder()
         regex.exactly(1).of("dart")
-        regex.behind(RegExpBuilder().exactly(1).of("lang"))
+        regex.ahead(RegExpBuilder().exactly(1).of("lang"))
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("dartlang").group() == "dart")
         self.assertTrue(regex.match("dartpqr") is None)
   
-    def test_notBehind(self):
+    def test_notAhead(self):
         regex = RegExpBuilder()
         regex.exactly(1).of("dart")
-        regex.notBehind(RegExpBuilder().exactly(1).of("pqr"))
+        regex.notAhead(RegExpBuilder().exactly(1).of("pqr"))
         regex = regex.getRegExp()
         
         self.assertTrue(regex.match("dartlang") is not None)

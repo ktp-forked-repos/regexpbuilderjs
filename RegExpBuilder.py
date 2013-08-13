@@ -15,8 +15,8 @@ class RegExpBuilder:
         self._from = ""
         self._notFrom = ""
         self._like = ""
-        self._behind = ""
-        self._notBehind = ""
+        self._ahead = ""
+        self._notAhead = ""
         self._either = ""
         self._reluctant = False
         self._capture = False
@@ -32,8 +32,8 @@ class RegExpBuilder:
         self._from = ""
         self._notFrom = ""
         self._like = ""
-        self._behind = ""
-        self._notBehind = ""
+        self._ahead = ""
+        self._notAhead = ""
         self._either = ""
         self._reluctant = False
         self._capture = False
@@ -44,8 +44,8 @@ class RegExpBuilder:
             quantityLiteral = self._getQuantityLiteral()
             characterLiteral = self._getCharacterLiteral()
             reluctantLiteral = "?" if self._reluctant else ""
-            behindLiteral = "(?=" + self._behind + ")" if self._behind != "" else ""
-            notBehindLiteral = "(?!" + self._notBehind + ")" if self._notBehind != "" else ""
+            behindLiteral = "(?=" + self._ahead + ")" if self._ahead != "" else ""
+            notBehindLiteral = "(?!" + self._notAhead + ")" if self._notAhead != "" else ""
             self._literal += "(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")" + behindLiteral + notBehindLiteral
             self._clear()
   
@@ -174,12 +174,12 @@ class RegExpBuilder:
         self._reluctant = True
         return self
   
-    def behind(self, r):
-        self._behind = r.getLiteral()
+    def ahead(self, r):
+        self._ahead = r.getLiteral()
         return self
   
-    def notBehind(self, r):
-        self._notBehind = r.getLiteral()
+    def notAhead(self, r):
+        self._notAhead = r.getLiteral()
         return self
   
     def asGroup(self):
@@ -250,6 +250,16 @@ class RegExpBuilder:
 
     def upperCaseLetters(self):
         self._from = "A-Z"
+        return self
+
+    def append(self, r):
+        self.exactly(1)
+        self._like = r.getLiteral()
+        return self
+
+    def optional(self, r):
+        self.max(1)
+        self._like = r.getLiteral()
         return self
   
     def _escapeInsideCharacterClass(self, s):

@@ -214,12 +214,12 @@ public class Tests {
 	    assertTrue(m.end() == 8);
 	}
 	  
-	@Test public void behind() {
+	@Test public void ahead() {
 		RegExpBuilder r = new RegExpBuilder()
 			.exactly(1).of("lang");
 	    Pattern regex = new RegExpBuilder()
 	    	.exactly(1).of("dart")
-	    	.behind(r)
+	    	.ahead(r)
 	    	.getRegExp();
 	    Matcher m = regex.matcher("dartlang");
 	    m.find();
@@ -228,12 +228,12 @@ public class Tests {
 	    assertTrue(!regex.matcher("dartpqr").matches());
 	}
 	  
-	@Test public void notBehind() {
+	@Test public void notAhead() {
 		RegExpBuilder r = new RegExpBuilder()
 			.exactly(1).of("pqr");
 	    Pattern regex = new RegExpBuilder()
 	    	.exactly(1).of("dart")
-	    	.notBehind(r)
+	    	.notAhead(r)
 	    	.getRegExp();
 	    
 	    assertTrue(regex.matcher("dartlang").find());

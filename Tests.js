@@ -251,20 +251,20 @@ tests.push(new Test("reluctantly", function (self) {
     self.expect(regex.exec("pprrrrpprrpp")[0] == "pprrrrpp");
 }));
 
-tests.push(new Test("behindPattern", function (self) {
+tests.push(new Test("ahead", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("dart")
-        .behindPattern(new RegExpBuilder().exactly(1).of("lang"))
+        .ahead(new RegExpBuilder().exactly(1).of("lang"))
         .getRegExp();
 
     self.expect(regex.exec("dartlang")[0] == "dart");
     self.expect(!regex.test("dartpqr"));
 }));
 
-tests.push(new Test("notBehindPattern", function (self) {
+tests.push(new Test("notAhead", function (self) {
     var regex = new RegExpBuilder()
         .exactly(1).of("dart")
-        .notBehindPattern(new RegExpBuilder().exactly(1).of("pqr"))
+        .notAhead(new RegExpBuilder().exactly(1).of("pqr"))
         .getRegExp();
 
     self.expect(regex.test("dartlang"));
