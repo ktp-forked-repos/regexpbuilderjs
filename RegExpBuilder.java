@@ -19,8 +19,6 @@ public class RegExpBuilder {
 	private String _from;
 	private String _notFrom;
 	private String _like;
-	private String _ahead;
-	private String _notAhead;
 	private String _either;
 	private Boolean _reluctant;
 	private Boolean _capture;
@@ -44,8 +42,6 @@ public class RegExpBuilder {
 		_from = "";
 		_notFrom = "";
 		_like = "";
-		_ahead = "";
-		_notAhead = "";
 		_either = "";
 		_reluctant = false;
 		_capture = false;
@@ -57,9 +53,7 @@ public class RegExpBuilder {
   			String quantityLiteral = getQuantityLiteral();
   			String characterLiteral = getCharacterLiteral();
   			String reluctantLiteral = _reluctant ? "?" : "";
-  			String behindLiteral = _ahead != "" ? "(?=" + _ahead + ")" : "";
-  			String notBehindLiteral = _notAhead != "" ? "(?!" + _notAhead + ")" : "";
-  			_literal.append("(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")" + behindLiteral + notBehindLiteral);
+  			_literal.append("(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")");
   			_clear();
     	}
   	}
@@ -227,12 +221,14 @@ public class RegExpBuilder {
   	}
   
   	public RegExpBuilder ahead(RegExpBuilder r) {
-  		_ahead = r.getLiteral();
+  		_flushState();
+  		_literal.append("(?=" + r.getLiteral() + ")");
   		return this;
   	}
   
   	public RegExpBuilder notAhead(RegExpBuilder r) {
-  		_notAhead = r.getLiteral();
+  		_flushState();
+  		_literal.append("(?!" + r.getLiteral() + ")");
   		return this;
   	}
   

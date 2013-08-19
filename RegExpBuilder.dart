@@ -14,8 +14,6 @@ class RegExpBuilder {
   String _from;
   String _notFrom;
   String _like;
-  String _ahead;
-  String _notAhead;
   String _either;
   bool _reluctant;
   bool _capture;
@@ -39,8 +37,6 @@ class RegExpBuilder {
     _from = "";
     _notFrom = "";
     _like = "";
-    _ahead = "";
-    _notAhead = "";
     _either = "";
     _reluctant = false;
     _capture = false;
@@ -52,9 +48,7 @@ class RegExpBuilder {
       var quantityLiteral = _getQuantityLiteral();
       var characterLiteral = _getCharacterLiteral();
       var reluctantLiteral = _reluctant ? "?" : "";
-      var behindLiteral = _ahead != "" ? "(?=$_ahead)" : "";
-      var notBehindLiteral = _notAhead != "" ? "(?!$_notAhead)" : "";
-      _literal.add("($captureLiteral(?:$characterLiteral)$quantityLiteral$reluctantLiteral)$behindLiteral$notBehindLiteral");
+      _literal.add("($captureLiteral(?:$characterLiteral)$quantityLiteral$reluctantLiteral)");
       _clear();
     }
   }
@@ -214,12 +208,14 @@ class RegExpBuilder {
   }
   
   RegExpBuilder ahead(RegExpBuilder r) {
-    _ahead = r.getLiteral();
+    _flushState();
+    _literal.add("(?=${r.getLiteral()})");
     return this;
   }
   
   RegExpBuilder notAhead(RegExpBuilder r) {
-    _notAhead = r.getLiteral();
+    _flushState();
+    _literal.add("(?!${r.getLiteral()})");
     return this;
   }
   

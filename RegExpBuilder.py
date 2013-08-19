@@ -15,8 +15,6 @@ class RegExpBuilder:
         self._from = ""
         self._notFrom = ""
         self._like = ""
-        self._ahead = ""
-        self._notAhead = ""
         self._either = ""
         self._reluctant = False
         self._capture = False
@@ -32,8 +30,6 @@ class RegExpBuilder:
         self._from = ""
         self._notFrom = ""
         self._like = ""
-        self._ahead = ""
-        self._notAhead = ""
         self._either = ""
         self._reluctant = False
         self._capture = False
@@ -44,9 +40,7 @@ class RegExpBuilder:
             quantityLiteral = self._getQuantityLiteral()
             characterLiteral = self._getCharacterLiteral()
             reluctantLiteral = "?" if self._reluctant else ""
-            behindLiteral = "(?=" + self._ahead + ")" if self._ahead != "" else ""
-            notBehindLiteral = "(?!" + self._notAhead + ")" if self._notAhead != "" else ""
-            self._literal += "(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")" + behindLiteral + notBehindLiteral
+            self._literal += "(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")"
             self._clear()
   
     def _getQuantityLiteral(self):
@@ -175,11 +169,13 @@ class RegExpBuilder:
         return self
   
     def ahead(self, r):
-        self._ahead = r.getLiteral()
+        self._flushState()
+        self._literal += "(?=" + r.getLiteral() + ")"
         return self
   
     def notAhead(self, r):
-        self._notAhead = r.getLiteral()
+        self._flushState()
+        self._literal += "(?!" + r.getLiteral() + ")"
         return self
   
     def asGroup(self):
