@@ -34,23 +34,23 @@ class RegExpBuilder:
         self._reluctant = False
         self._capture = False
 
-    def _flushState(self):
+    def _flush_state(self):
         if self._of != "" or self._ofAny or self._ofGroup > 0 or self._from != "" or self._notFrom != "" or self._like != "":
             captureLiteral = "" if self._capture else "?:"
-            quantityLiteral = self._getQuantityLiteral()
-            characterLiteral = self._getCharacterLiteral()
+            quantityLiteral = self._get_quantity_literal()
+            characterLiteral = self._get_character_literal()
             reluctantLiteral = "?" if self._reluctant else ""
             self._literal += "(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")"
             self._clear()
   
-    def _getQuantityLiteral(self):
+    def _get_quantity_literal(self):
         if self._min != -1:
             if self._max != -1:
                 return "{" + str(self._min) + "," + str(self._max) + "}"
             return "{" + str(self._min) + ",}"
         return "{0," + str(self._max) + "}"
   
-    def _getCharacterLiteral(self):
+    def _get_character_literal(self):
         if self._of != "":
             return self._of
         if self._ofAny:
@@ -64,12 +64,12 @@ class RegExpBuilder:
         if self._like != "":
             return self._like
   
-    def getLiteral(self):
-        self._flushState()
+    def get_literal(self):
+        self._flush_state()
         return self._literal
   
-    def getRegExp(self):
-        self._flushState()
+    def get_regexp(self):
+        self._flush_state()
         flags = 0
         if self._ignoreCase:
             flags = flags | re.IGNORECASE
@@ -77,42 +77,42 @@ class RegExpBuilder:
             flags = flags | re.MULTILINE
         return re.compile(self._literal, flags)
   
-    def ignoreCase(self):
+    def ignore_case(self):
         self._ignoreCase = True
         return self
   
-    def multiLine(self):
+    def multi_line(self):
         self._multiLine = True
         return self
   
-    def startOfInput(self):
+    def start_of_input(self):
         self._literal += "(?:^)"
         return self
 
-    def startOfLine(self):
-        self.multiLine()
-        return self.startOfInput()
+    def start_of_line(self):
+        self.multi_line()
+        return self.start_of_input()
   
-    def endOfInput(self):
-        self._flushState()
+    def end_of_input(self):
+        self._flush_state()
         self._literal += "(?:$)"
         return self
 
-    def endOfLine(self):
-        self.multiLine()
-        return self.endOfInput()
+    def end_of_line(self):
+        self.multi_line()
+        return self.end_of_input()
   
-    def eitherLike(self, r):
-        self._flushState()
-        self._either = r.getLiteral()
+    def either_like(self, r):
+        self._flush_state()
+        self._either = r.get_literal()
         return self
 
-    def eitherString(self, s):
-        return self.eitherLike(RegExpBuilder().exactly(1).of(s))
+    def either_string(self, s):
+        return self.either_like(RegExpBuilder().exactly(1).of(s))
   
-    def orLike(self, r):
+    def or_like(self, r):
         eitherLike = self._either
-        orLike = r.getLiteral()
+        orLike = r.get_literal()
         if eitherLike == "":
             self._literal = self._literal[:-1]
             self._literal += "|(?:" + orLike + "))"
@@ -121,47 +121,47 @@ class RegExpBuilder:
         self._clear()
         return self
 
-    def orString(self, s):
-        return self.orLike(RegExpBuilder().exactly(1).of(s))
+    def or_string(self, s):
+        return self.or_like(RegExpBuilder().exactly(1).of(s))
   
     def exactly(self, n):
-        self._flushState()
+        self._flush_state()
         self._min = n
         self._max = n
         return self
   
     def min(self, n):
-        self._flushState()
+        self._flush_state()
         self._min = n
         return self
   
     def max(self, n):
-        self._flushState()
+        self._flush_state()
         self._max = n
         return self
   
     def of(self, s):
-        self._of = self._escapeOutsideCharacterClass(s)
+        self._of = self._escape_outside_character_class(s)
         return self
   
-    def ofAny(self):
+    def of_any(self):
         self._ofAny = True
         return self
 
-    def ofGroup(self, n):
+    def of_group(self, n):
         self._ofGroup = n
         return self
   
-    def fromClass(self, s):
-        self._from = self._escapeInsideCharacterClass("".join(s))
+    def from_class(self, s):
+        self._from = self._escape_inside_character_class("".join(s))
         return self
   
-    def notFromClass(self, s):
-        self._notFrom = self._escapeInsideCharacterClass("".join(s))
+    def not_from_class(self, s):
+        self._notFrom = self._escape_inside_character_class("".join(s))
         return self
   
     def like(self, r):
-        self._like = r.getLiteral()
+        self._like = r.get_literal()
         return self
   
     def reluctantly(self):
@@ -169,16 +169,16 @@ class RegExpBuilder:
         return self
   
     def ahead(self, r):
-        self._flushState()
-        self._literal += "(?=" + r.getLiteral() + ")"
+        self._flush_state()
+        self._literal += "(?=" + r.get_literal() + ")"
         return self
   
-    def notAhead(self, r):
-        self._flushState()
-        self._literal += "(?!" + r.getLiteral() + ")"
+    def not_ahead(self, r):
+        self._flush_state()
+        self._literal += "(?!" + r.get_literal() + ")"
         return self
   
-    def asGroup(self):
+    def as_group(self):
         self._capture = True
         return self
 
@@ -186,27 +186,39 @@ class RegExpBuilder:
         return self.exactly(1).of(s)
 
     def some(self, s):
-        return self.min(1).fromClass(s)
+        return self.min(1).from_class(s)
 
-    def maybeSome(self, s):
-        return self.min(0).fromClass(s)
+    def maybe_some(self, s):
+        return self.min(0).from_class(s)
 
     def maybe(self, s):
         return self.max(1).of(s)
 
+    def something(self):
+        return self.min(1).of_any()
+
     def anything(self):
-        return self.min(1).ofAny()
+        return self.min(0).of_any()
 
-    def lineBreak(self):
-        return self.eitherString("\r\n").orString("\r").orString("\n")
+    def any(self):
+        return self.exactly(1).of_any()
 
-    def lineBreaks(self):
-        return self.like(RegExpBuilder().lineBreak())
+    def line_break(self):
+        return self.either_string("\r\n").or_string("\r").or_string("\n")
+
+    def line_breaks(self):
+        return self.like(RegExpBuilder().line_break())
 
     def whitespace(self):
         if self._min == -1 and self._max == -1:
             return self.exactly(1).of("\s")
         self._like = "\s"
+        return self
+
+    def not_whitespace(self):
+        if self._min == -1 and self._max == -1:
+            return self.exactly(1).of("\S")
+        self._like = "\S"
         return self
 
     def tab(self):
@@ -218,53 +230,68 @@ class RegExpBuilder:
     def digit(self):
         return self.exactly(1).of("\d")
 
+    def not_digit(self):
+        return self.exactly(1).of("\D")
+
     def digits(self):
         return self.like(RegExpBuilder().digit())
+
+    def not_digits(self):
+        return self.like(RegExpBuilder().not_digit())
 
     def letter(self):
         self.exactly(1)
         self._from = "A-Za-z"
         return self
 
+    def not_letter(self):
+        self.exactly(1)
+        self._notFrom = "A-Za-z"
+        return self
+
     def letters(self):
         self._from = "A-Za-z"
         return self
 
-    def lowerCaseLetter(self):
+    def not_letters(self):
+        self._not_from = "A-Za-z"
+        return self
+
+    def lower_case_letter(self):
         self.exactly(1)
         self._from = "a-z"
         return self
 
-    def lowerCaseLetters(self):
+    def lower_case_letters(self):
         self._from = "a-z"
         return self
 
-    def upperCaseLetter(self):
+    def upper_case_letter(self):
         self.exactly(1)
         self._from = "A-Z"
         return self
 
-    def upperCaseLetters(self):
+    def upper_case_letters(self):
         self._from = "A-Z"
         return self
 
     def append(self, r):
         self.exactly(1)
-        self._like = r.getLiteral()
+        self._like = r.get_literal()
         return self
 
     def optional(self, r):
         self.max(1)
-        self._like = r.getLiteral()
+        self._like = r.get_literal()
         return self
   
-    def _escapeInsideCharacterClass(self, s):
-        return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass)
+    def _escape_inside_character_class(self, s):
+        return self._escape_special_characters(s, self._specialCharactersInsideCharacterClass)
 
-    def _escapeOutsideCharacterClass(self, s):
-        return self._escapeSpecialCharacters(s, self._specialCharactersOutsideCharacterClass)
+    def _escape_outside_character_class(self, s):
+        return self._escape_special_characters(s, self._specialCharactersOutsideCharacterClass)
   
-    def _escapeSpecialCharacters(self, s, specialCharacters):
+    def _escape_special_characters(self, s, specialCharacters):
         escapedString = ""
         for i in range(len(s)):
             character = s[i]

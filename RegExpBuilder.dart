@@ -240,8 +240,16 @@ class RegExpBuilder {
     return max(1).of(s);
   }
   
-  RegExpBuilder anything() {
+  RegExpBuilder something() {
     return min(1).ofAny();
+  }
+  
+  RegExpBuilder anything() {
+    return min(0).ofAny();
+  }
+  
+  RegExpBuilder any() {
+    return exactly(1).ofAny();
   }
   
   RegExpBuilder lineBreak() {
@@ -260,6 +268,14 @@ class RegExpBuilder {
     return this;
   }
   
+  RegExpBuilder notWhitespace() {
+    if (_min == -1 && _max == -1) {
+      return exactly(1).of("\S");
+    }
+    _like = "\S";
+    return this;
+  }
+  
   RegExpBuilder tab() {
     return exactly(1).of("\t");
   }
@@ -272,8 +288,16 @@ class RegExpBuilder {
     return exactly(1).of("\d");
   }
   
+  RegExpBuilder notDigit() {
+    return exactly(1).of("\D");
+  }
+  
   RegExpBuilder digits() {
     return like(new RegExpBuilder().digit());
+  }
+  
+  RegExpBuilder notDigits() {
+    return like(new RegExpBuilder().notDigit());
   }
   
   RegExpBuilder letter() {
@@ -282,8 +306,19 @@ class RegExpBuilder {
     return this;
   }
   
+  RegExpBuilder notLetter() {
+    exactly(1);
+    _notFrom = "A-Za-z";
+    return this;
+  }
+  
   RegExpBuilder letters() {
     _from = "A-Za-z";
+    return this;
+  }
+  
+  RegExpBuilder notLetters() {
+    _notFrom = "A-Za-z";
     return this;
   }
   

@@ -225,8 +225,16 @@
         return self.max(1).of(s);
     }
 
-    self.anything = function () {
+    self.something = function () {
         return self.min(1).ofAny();
+    }
+
+    self.anything = function () {
+        return self.min(0).ofAny();
+    }
+
+    self.any = function () {
+        return self.exactly(1).ofAny();
     }
 
     self.lineBreak = function () {
@@ -248,6 +256,14 @@
         return self;
     }
 
+    self.notWhitespace = function () {
+        if (self._min == -1 && self._max == -1) {
+            return self.exactly(1).of("\S");
+        }
+        self._like = "\S";
+        return self;
+    }
+
     self.tab = function () {
         return self.exactly(1).of("\t");
     }
@@ -260,8 +276,16 @@
         return self.exactly(1).of("\d");
     }
 
+    self.notDigit = function () {
+        return self.exactly(1).of("\D");
+    }
+
     self.digits = function () {
         return self.like(new RegExpBuilder().digit());
+    }
+
+    self.notDigits = function () {
+        return self.like(new RegExpBuilder().notDigit());
     }
 
     self.letter = function () {
@@ -270,8 +294,19 @@
         return self;
     }
 
+    self.notLetter = function () {
+        self.exactly(1);
+        self._notFrom = "A-Za-z";
+        return self;
+    }
+
     self.letters = function () {
         self._from = "A-Za-z";
+        return self;
+    }
+
+    self.notLetters = function () {
+        self._notFrom = "A-Za-z";
         return self;
     }
 
