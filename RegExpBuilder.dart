@@ -124,17 +124,31 @@ class RegExpBuilder {
     return endOfInput();
   }
   
-  RegExpBuilder eitherLike(RegExpBuilder r) {
+  RegExpBuilder either(Dynamic r) {
+    if (r is String) {
+      return this._eitherLike(new RegExpBuilder().exactly(1).of(r));
+    }
+    else {
+      return this._eitherLike(r);
+    }
+  }
+  
+  RegExpBuilder _eitherLike(RegExpBuilder r) {
     _flushState();
     _either = r.getLiteral();
     return this;
   }
   
-  RegExpBuilder either(String s) {
-    return this.eitherLike(new RegExpBuilder().exactly(1).of(s));
+  RegExpBuilder or(Dynamic r) {
+    if (r is String) {
+      return this._orLike(new RegExpBuilder().exactly(1).of(r));
+    }
+    else {
+      return this._orLike(r);
+    }
   }
   
-  RegExpBuilder orLike(RegExpBuilder r) {
+  RegExpBuilder _orLike(RegExpBuilder r) {
     var either = _either;
     var or = r.getLiteral();
     if (either == "") {
@@ -147,10 +161,6 @@ class RegExpBuilder {
     }
     _clear();
     return this;
-  }
-  
-  RegExpBuilder or(String s) {
-    return this.orLike(new RegExpBuilder().exactly(1).of(s));
   }
   
   RegExpBuilder exactly(int n) {

@@ -108,17 +108,31 @@
         return self.endOfInput();
     }
 
-    self.eitherLike = function (r) {
+    self.either = function (r) {
+        if (r.split) {
+            return self._eitherLike(new RegExpBuilder().exactly(1).of(r));
+        }
+        else {
+            return self._eitherLike(r);
+        }
+    }
+
+    self._eitherLike = function (r) {
         self._flushState();
         self._either = r.getLiteral();
         return self;
     }
 
-    self.either = function (s) {
-        return self.eitherLike(new RegExpBuilder().exactly(1).of(s));
+    self.or = function (r) {
+        if (r.split) {
+            return self._orLike(new RegExpBuilder().exactly(1).of(r));
+        }
+        else {
+            return self._orLike(r);
+        }
     }
 
-    self.orLike = function (r) {
+    self._orLike = function (r) {
         var either = self._either;
         var or = r.getLiteral();
         if (either == "") {
@@ -132,10 +146,6 @@
         }
         self._clear();
         return self;
-    }
-
-    self.or = function (s) {
-        return self.orLike(new RegExpBuilder().exactly(1).of(s));
     }
 
     self.exactly = function (n) {
