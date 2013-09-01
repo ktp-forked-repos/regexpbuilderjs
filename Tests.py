@@ -21,10 +21,11 @@ class Test(unittest.TestCase):
         self.assertTrue(regex.match("pq") is None)
   
     def test_eitherLike_orLike(self):
+        p1 = RegExpBuilder().exactly(1).of("p")
+        p2 = RegExpBuilder().exactly(2).of("q")
         regex = RegExpBuilder()
         regex.start_of_line()
-        regex.either_like(RegExpBuilder().exactly(1).of("p"))
-        regex.or_like(RegExpBuilder().exactly(2).of("q"))
+        regex.either([p1, p2])
         regex.end_of_line()
         regex = regex.get_regexp()
         
@@ -34,10 +35,11 @@ class Test(unittest.TestCase):
         self.assertTrue(regex.match("qqp") is None)
 
     def test_orLike_chain(self):
+        p1 = RegExpBuilder().exactly(1).of("p")
+        p2 = RegExpBuilder().exactly(1).of("q")
+        p3 = RegExpBuilder().exactly(1).of("r")
         regex = RegExpBuilder()
-        regex.either_like(RegExpBuilder().exactly(1).of("p"))
-        regex.or_like(RegExpBuilder().exactly(1).of("q"))
-        regex.or_like(RegExpBuilder().exactly(1).of("r"))
+        regex.either([p1, p2, p3])
         regex = regex.get_regexp()
 
         self.assertTrue(regex.match("p") is not None)
@@ -47,8 +49,7 @@ class Test(unittest.TestCase):
 
     def test_orString(self):
         regex = RegExpBuilder()
-        regex.either_string("p")
-        regex.or_string("q")
+        regex.either(["p", "q"])
         regex = regex.get_regexp()
 
         self.assertTrue(regex.match("p") is not None)

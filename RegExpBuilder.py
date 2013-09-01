@@ -101,16 +101,25 @@ class RegExpBuilder:
     def end_of_line(self):
         self.multi_line()
         return self.end_of_input()
+
+    def either(self, s):
+        firstElement = s[0]
+        if type(firstElement) is str:
+            self._either_like(RegExpBuilder().exactly(1).of(firstElement))
+        else:
+            self._either_like(firstElement)
+        for element in s[1:]:
+            if type(element) is str:
+                self._or_like(RegExpBuilder().exactly(1).of(element))
+            else:
+                self._or_like(element)
   
-    def either_like(self, r):
+    def _either_like(self, r):
         self._flush_state()
         self._either = r.get_literal()
         return self
-
-    def either_string(self, s):
-        return self.either_like(RegExpBuilder().exactly(1).of(s))
-  
-    def or_like(self, r):
+    
+    def _or_like(self, r):
         eitherLike = self._either
         orLike = r.get_literal()
         if eitherLike == "":
@@ -120,9 +129,6 @@ class RegExpBuilder:
             self._literal += "(?:(?:" + eitherLike + ")|(?:" + orLike + "))"
         self._clear()
         return self
-
-    def or_string(self, s):
-        return self.or_like(RegExpBuilder().exactly(1).of(s))
   
     def exactly(self, n):
         self._flush_state()
@@ -204,7 +210,7 @@ class RegExpBuilder:
         return self.exactly(1).of_any()
 
     def line_break(self):
-        return self.either_string("\r\n").or_string("\r").or_string("\n")
+        return self.either(["\r\n", "\r", "\n"])
 
     def line_breaks(self):
         return self.like(RegExpBuilder().line_break())
