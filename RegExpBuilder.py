@@ -5,6 +5,7 @@ class RegExpBuilder:
     def __init__(self):
         self._literal = ""
         self._ignoreCase = False
+        self._multiLine = False
         self._specialCharactersInsideCharacterClass = set(["^", "-", "]"])
         self._specialCharactersOutsideCharacterClass = set([".", "^", "$", "*", "+", "?", "(", ")", "[", "{"])
         self._min = -1
@@ -103,31 +104,18 @@ class RegExpBuilder:
         return self.end_of_input()
 
     def either(self, s):
-        firstElement = s[0]
-        if type(firstElement) is str:
-            self._either_like(RegExpBuilder().exactly(1).of(firstElement))
-        else:
-            self._either_like(firstElement)
-        for element in s[1:]:
-            if type(element) is str:
-                self._or_like(RegExpBuilder().exactly(1).of(element))
-            else:
-                self._or_like(element)
-  
-    def _either_like(self, r):
-        self._flush_state()
-        self._either = r.get_literal()
-        return self
-    
-    def _or_like(self, r):
-        eitherLike = self._either
-        orLike = r.get_literal()
-        if eitherLike == "":
-            self._literal = self._literal[:-1]
-            self._literal += "|(?:" + orLike + "))"
-        else:
-            self._literal += "(?:(?:" + eitherLike + ")|(?:" + orLike + "))"
-        self._clear()
+        if len(s) > 0:
+            self._flush_state()
+            literal = "(?:"
+            for element in s:
+                literal += "(?:"
+                if type(element) is str:
+                    literal += RegExpBuilder().exactly(1).of(element).get_literal()
+                else:
+                    literal += element.get_literal()
+                literal += ")|"
+            literal = literal[:-1] + ")"
+            self._literal += literal
         return self
   
     def exactly(self, n):
