@@ -223,6 +223,10 @@
         return self.exactly(1).of(s);
     }
 
+    self.find = function (s) {
+        return self.then(s);
+    }
+
     self.some = function (s) {
         return self.min(1).from(s);
     }
@@ -374,5 +378,137 @@
             }
         }
         return self._escapedString.join("");
+    }
+}
+
+var RegExpBuilderFactory = function () {
+    var self = this;
+
+    self.ignoreCase = function () {
+        return new RegExpBuilder().ignoreCase();
+    }
+
+    self.multiLine = function () {
+        return new RegExpBuilder().multiLine();
+    }
+
+    self.startOfInput = function () {
+        return new RegExpBuilder().startOfInput();
+    }
+
+    self.startOfLine = function () {
+        return new RegExpBuilder().startOfLine();
+    }
+
+    self.endOfInput = function () {
+        return new RegExpBuilder().endOfInput();
+    }
+
+    self.endOfLine = function () {
+        return new RegExpBuilder().endOfLine();
+    }
+
+    self.either = function (r) {
+        return new RegExpBuilder().either(r);
+    }
+
+    self.exactly = function (n) {
+        return new RegExpBuilder().exactly(n);
+    }
+
+    self.min = function (n) {
+        return new RegExpBuilder().min(n);
+    }
+
+    self.max = function (n) {
+        return new RegExpBuilder().max(n);
+    }
+
+    self.ahead = function (r) {
+        return new RegExpBuilder().ahead(r);
+    }
+
+    self.notAhead = function (r) {
+        return new RegExpBuilder().notAhead(r);
+    }
+
+    self.then = function (s) {
+        return new RegExpBuilder().then(s);
+    }
+
+    self.find = function (s) {
+        return new RegExpBuilder().find(s);
+    }
+
+    self.some = function (s) {
+        return new RegExpBuilder().some(s);
+    }
+
+    self.maybeSome = function (s) {
+        return new RegExpBuilder().maybeSome(s);
+    }
+
+    self.maybe = function (s) {
+        return new RegExpBuilder().maybe(s);
+    }
+
+    self.something = function () {
+        return new RegExpBuilder().something();
+    }
+
+    self.anything = function () {
+        return new RegExpBuilder().anything();
+    }
+
+    self.any = function () {
+        return new RegExpBuilder().any();
+    }
+
+    self.lineBreak = function () {
+        return new RegExpBuilder().lineBreak();
+    }
+
+    self.whitespace = function () {
+        return new RegExpBuilder().whitespace();
+    }
+
+    self.notWhitespace = function () {
+        return new RegExpBuilder().notWhitespace();
+    }
+
+    self.tab = function () {
+        return new RegExpBuilder().tab();
+    }
+
+    self.digit = function () {
+        return new RegExpBuilder().digit();
+    }
+
+    self.notDigit = function () {
+        return new RegExpBuilder().notDigit();
+    }
+
+    self.letter = function () {
+        return new RegExpBuilder().letter();
+    }
+
+    self.notLetter = function () {
+        return new RegExpBuilder().notLetter();
+    }
+
+    self.lowerCaseLetter = function () {
+        return new RegExpBuilder().lowerCaseLetter();
+    }
+
+    self.upperCaseLetter = function () {
+        return new RegExpBuilder().upperCaseLetter();
+    }
+
+    self.append = function (r) {
+        return new RegExpBuilder().append(r);
+    }
+
+    self.optional = function (r) {
+        return new RegExpBuilder().optional(r);
     }
 }

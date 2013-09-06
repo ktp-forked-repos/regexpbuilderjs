@@ -11,12 +11,12 @@ Here are a couple of examples using Javascript:
 <h3>Money</h3>
 
 ```
-var digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-var regex = new RegExpBuilder()
-  .then("$")
-  .some(digits)
+var regex = r
+  .find("$")
+  .min(1).digits()
   .then(".")
-  .exactly(2).from(digits)
+  .digit()
+  .digit()
   .getRegExp();
   
 regex.test("$10.00")); // true
@@ -25,11 +25,11 @@ regex.test("$10.00")); // true
 <h3>Nested patterns</h3>
 
 ```
-var pattern = new RegExpBuilder()
+var pattern = r
   .min(1).of("p")
   .min(2).of("q");
 
-var regex = new RegExpBuilder()
+var regex = r
   .exactly(2).like(pattern)
   .getRegExp();
 
