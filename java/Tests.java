@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import org.junit.*;
 
 public class Tests {
+	
 	@Test public void startOfLine() {
 		Pattern regex = new RegExpBuilder()
 			.startOfLine()

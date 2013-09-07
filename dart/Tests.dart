@@ -1,5 +1,5 @@
 #import('../../../Andrew/Documents/dart/dart-sdk/lib/unittest/unittest.dart');
-#source('RegExpBuilder.dart');
+#import('RegExpBuilder.dart');
 
 main() {
   test("startOfLine", () {

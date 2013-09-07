@@ -179,6 +179,9 @@ class RegExpBuilder:
     def then(self, s):
         return self.exactly(1).of(s)
 
+    def find(self, s):
+        return self.then(s)
+
     def some(self, s):
         return self.min(1).from_class(s)
 
@@ -191,8 +194,22 @@ class RegExpBuilder:
     def something(self):
         return self.min(1).of_any()
 
+    def something_but(self, s):
+        if len(s) == 1:
+            return self.min(1).not_from_class([s])
+        else:
+            self.not_ahead(RegExpBuilder().exactly(1).of(s))
+            return self.min(1).of_any()
+
     def anything(self):
         return self.min(0).of_any()
+
+    def anything_but(self, s):
+        if len(s) == 1:
+            return self.min(0).not_from_class([s])
+        else:
+            self.not_ahead(RegExpBuilder().exactly(1).of(s))
+            return self.min(0).of_any()
 
     def any(self):
         return self.exactly(1).of_any()

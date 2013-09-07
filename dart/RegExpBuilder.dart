@@ -1,3 +1,5 @@
+#library('RegExpBuilder');
+
 class RegExpBuilder {
   
   List<String> _literal;
@@ -238,6 +240,10 @@ class RegExpBuilder {
     return exactly(1).of(s);
   }
   
+  RegExpBuilder find(String s) {
+    return then(s);
+  }
+  
   RegExpBuilder some(List<String> s) {
     return min(1).from(s);
   }
@@ -254,7 +260,23 @@ class RegExpBuilder {
     return min(1).ofAny();
   }
   
+  RegExpBuilder somethingBut(String s) {
+    if (s.length == 1) {
+      return min(1).notFrom([s]);
+    }
+    notAhead(new RegExpBuilder().exactly(1).of(s));
+    return min(1).ofAny();
+  }
+  
   RegExpBuilder anything() {
+    return min(0).ofAny();
+  }
+  
+  RegExpBuilder anythingBut(String s) {
+    if (s.length == 1) {
+      return min(0).notFrom([s]);
+    }
+    notAhead(new RegExpBuilder().exactly(1).of(s));
     return min(0).ofAny();
   }
   

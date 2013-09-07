@@ -241,6 +241,10 @@ public class RegExpBuilder {
   		return exactly(1).of(s);
   	}
   	
+  	public RegExpBuilder find(String s) {
+  		return then(s);
+  	}
+  	
   	public RegExpBuilder some(char[] s) {
   		return min(1).from(s);
   	}
@@ -257,7 +261,23 @@ public class RegExpBuilder {
   		return min(1).ofAny();
   	}
   	
+  	public RegExpBuilder somethingBut(String s) {
+  		if (s.length() == 1) {
+  			return min(1).notFrom(s.toCharArray());
+  		}
+  		notAhead(new RegExpBuilder().exactly(1).of(s));
+  		return min(1).ofAny();
+  	}
+  	
   	public RegExpBuilder anything() {
+  		return min(0).ofAny();
+  	}
+  	
+  	public RegExpBuilder anythingBut(String s) {
+  		if (s.length() == 1) {
+  			return min(0).notFrom(s.toCharArray());
+  		}
+  		notAhead(new RegExpBuilder().exactly(1).of(s));
   		return min(0).ofAny();
   	}
   	

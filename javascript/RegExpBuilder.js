@@ -243,7 +243,23 @@
         return self.min(1).ofAny();
     }
 
+    self.somethingBut = function (s) {
+        if (s.length == 1) {
+            return self.min(1).notFrom([s]);
+        }
+        self.notAhead(new RegExpBuilder().exactly(1).of(s));
+        return self.min(1).ofAny();
+    }
+
     self.anything = function () {
+        return self.min(0).ofAny();
+    }
+
+    self.anythingBut = function (s) {
+        if (s.length == 1) {
+            return self.min(0).notFrom([s]);
+        }
+        self.notAhead(new RegExpBuilder().exactly(1).of(s));
         return self.min(0).ofAny();
     }
 
@@ -456,8 +472,16 @@ var RegExpBuilderFactory = function () {
         return new RegExpBuilder().something();
     }
 
+    self.somethingBut = function (s) {
+        return new RegExpBuilder().somethingBut(s);
+    }
+
     self.anything = function () {
         return new RegExpBuilder().anything();
+    }
+
+    self.anythingBut = function (s) {
+        return new RegExpBuilder().anythingBut(s);
     }
 
     self.any = function () {
