@@ -1,5 +1,5 @@
 import unittest
-from RegExpBuilder import RegExpBuilder
+from regexpbuilder.RegExpBuilder import RegExpBuilder
 
 class Test(unittest.TestCase):
     def test_start_of_line(self):
