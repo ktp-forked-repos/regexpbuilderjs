@@ -376,7 +376,7 @@
 
     self.append = function (r) {
         self.exactly(1);
-        self._like = r.getAdjustedLiteral(self._groupsUsed);
+        self._like = self.adjustGroupNumbering(r.getLiteral());
         return self;
     }
 
