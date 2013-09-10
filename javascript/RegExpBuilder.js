@@ -74,7 +74,7 @@
 
     self.incrementGroupNumbering = function (literal, increment) {
         if (increment > 0) {
-            literal = literal.replace(/[^\\]\\\d/, function (groupReference) {
+            literal = literal.replace(/[^\\]\\\d+/, function (groupReference) {
                 var groupNumber = parseInt(groupReference.substring(2)) + increment;
                 return groupReference.substring(0, 2) + groupNumber;
             });
