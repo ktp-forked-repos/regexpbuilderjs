@@ -196,7 +196,7 @@ class RegExpBuilder:
 
     def something_but(self, s):
         if len(s) == 1:
-            return self.min(1).not_from_class([s])
+            return self.exactly(1).not_from_class([s])
         else:
             self.not_ahead(RegExpBuilder().exactly(1).of(s))
             return self.min(1).of_any()
@@ -206,7 +206,7 @@ class RegExpBuilder:
 
     def anything_but(self, s):
         if len(s) == 1:
-            return self.min(0).not_from_class([s])
+            return self.max(1).not_from_class([s])
         else:
             self.not_ahead(RegExpBuilder().exactly(1).of(s))
             return self.min(0).of_any()

@@ -263,7 +263,7 @@
 
     self.somethingBut = function (s) {
         if (s.length == 1) {
-            return self.min(1).notFrom([s]);
+            return self.exactly(1).notFrom([s]);
         }
         self.notAhead(new RegExpBuilder().exactly(1).of(s));
         return self.min(1).ofAny();
@@ -275,7 +275,7 @@
 
     self.anythingBut = function (s) {
         if (s.length == 1) {
-            return self.min(0).notFrom([s]);
+            return self.max(1).notFrom([s]);
         }
         self.notAhead(new RegExpBuilder().exactly(1).of(s));
         return self.min(0).ofAny();

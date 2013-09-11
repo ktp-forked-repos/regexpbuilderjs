@@ -263,7 +263,7 @@ public class RegExpBuilder {
   	
   	public RegExpBuilder somethingBut(String s) {
   		if (s.length() == 1) {
-  			return min(1).notFrom(s.toCharArray());
+  			return exactly(1).notFrom(s.toCharArray());
   		}
   		notAhead(new RegExpBuilder().exactly(1).of(s));
   		return min(1).ofAny();
@@ -275,7 +275,7 @@ public class RegExpBuilder {
   	
   	public RegExpBuilder anythingBut(String s) {
   		if (s.length() == 1) {
-  			return min(0).notFrom(s.toCharArray());
+  			return max(1).notFrom(s.toCharArray());
   		}
   		notAhead(new RegExpBuilder().exactly(1).of(s));
   		return min(0).ofAny();
