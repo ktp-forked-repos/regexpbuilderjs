@@ -146,11 +146,11 @@ class RegExpBuilder:
         self._ofGroup = n
         return self
   
-    def from_class(self, s):
+    def inside(self, s):
         self._from = self._escape_inside_character_class("".join(s))
         return self
   
-    def not_from_class(self, s):
+    def outside(self, s):
         self._notFrom = self._escape_inside_character_class("".join(s))
         return self
   
@@ -183,10 +183,10 @@ class RegExpBuilder:
         return self.then(s)
 
     def some(self, s):
-        return self.min(1).from_class(s)
+        return self.min(1).inside(s)
 
     def maybe_some(self, s):
-        return self.min(0).from_class(s)
+        return self.min(0).inside(s)
 
     def maybe(self, s):
         return self.max(1).of(s)
@@ -196,7 +196,7 @@ class RegExpBuilder:
 
     def something_but(self, s):
         if len(s) == 1:
-            return self.exactly(1).not_from_class([s])
+            return self.exactly(1).outside([s])
         else:
             self.not_ahead(RegExpBuilder().exactly(1).of(s))
             return self.min(1).of_any()
@@ -206,7 +206,7 @@ class RegExpBuilder:
 
     def anything_but(self, s):
         if len(s) == 1:
-            return self.max(1).not_from_class([s])
+            return self.max(1).outside([s])
         else:
             self.not_ahead(RegExpBuilder().exactly(1).of(s))
             return self.min(0).of_any()

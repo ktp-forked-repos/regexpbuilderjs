@@ -141,7 +141,7 @@ class Test(unittest.TestCase):
         someLetters = ["p", "q", "r"]
         regex = RegExpBuilder()
         regex.start_of_line()
-        regex.exactly(3).from_class(someLetters)
+        regex.exactly(3).inside(someLetters)
         regex.end_of_line()
         regex = regex.get_regexp()
         
@@ -155,7 +155,7 @@ class Test(unittest.TestCase):
         someLetters = ["p", "q", "r"]
         regex = RegExpBuilder()
         regex.start_of_line()
-        regex.exactly(3).not_from_class(someLetters)
+        regex.exactly(3).outside(someLetters)
         regex.end_of_line()
         regex = regex.get_regexp()
         
@@ -205,7 +205,7 @@ class Test(unittest.TestCase):
         regex = RegExpBuilder()
         regex.min(1).max(3).of("p")
         regex.exactly(1).of("dart").as_group()
-        regex.exactly(1).from_class(["p", "q", "r"])
+        regex.exactly(1).inside(["p", "q", "r"])
         regex = regex.get_regexp()
         
         self.assertTrue(regex.match("pdartq").group(1) == "dart")
