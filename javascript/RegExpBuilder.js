@@ -73,7 +73,7 @@
     }
 
     self._combineGroupNumberingAndGetLiteral = function (r) {
-        var literal = self._incrementGroupNumering(r.getLiteral(), self._groupsUsed);
+        var literal = self._incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
         self._groupsUsed += r._groupsUsed;
         return literal;
     }
