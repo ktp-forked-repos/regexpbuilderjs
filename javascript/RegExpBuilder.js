@@ -72,7 +72,13 @@
         return self._literal.join("");
     }
 
-    self.incrementGroupNumbering = function (literal, increment) {
+    self._combineGroupNumberingAndGetLiteral = function (r) {
+        var literal = self._incrementGroupNumering(r.getLiteral(), self._groupsUsed);
+        self._groupsUsed += r._groupsUsed;
+        return literal;
+    }
+
+    self._incrementGroupNumbering = function (literal, increment) {
         if (increment > 0) {
             literal = literal.replace(/[^\\]\\\d+/, function (groupReference) {
                 var groupNumber = parseInt(groupReference.substring(2)) + increment;
@@ -130,7 +136,7 @@
 
     self._eitherLike = function (r) {
         self._flushState();
-        self._either = self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
+        self._either = self._combineGroupNumberingAndGetLiteral(r);
         return self;
     }
 
@@ -145,7 +151,7 @@
 
     self._orLike = function (r) {
         var either = self._either;
-        var or = self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
+        var or = self._combineGroupNumberingAndGetLiteral(r);
         if (either == "") {
             var lastOr = self._literal[self._literal.length - 1];
             lastOr = lastOr.substring(0, lastOr.length - 1);
@@ -204,7 +210,7 @@
     }
 
     self.like = function (r) {
-        self._like = self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
+        self._like = self._combineGroupNumberingAndGetLiteral(r);
         return self;
     }
 
@@ -215,13 +221,13 @@
 
     self.ahead = function (r) {
         self._flushState();
-        self._literal.push("(?=" + self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed) + ")");
+        self._literal.push("(?=" + self._combineGroupNumberingAndGetLiteral(r) + ")");
         return self;
     }
 
     self.notAhead = function (r) {
         self._flushState();
-        self._literal.push("(?!" + self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed) + ")");
+        self._literal.push("(?!" + self._combineGroupNumberingAndGetLiteral(r) + ")");
         return self;
     }
 
@@ -376,13 +382,13 @@
 
     self.append = function (r) {
         self.exactly(1);
-        self._like = self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
+        self._like = self._combineGroupNumberingAndGetLiteral(r);
         return self;
     }
 
     self.optional = function (r) {
         self.max(1);
-        self._like = self.incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
+        self._like = self._combineGroupNumberingAndGetLiteral(r);
         return self;
     }
 
