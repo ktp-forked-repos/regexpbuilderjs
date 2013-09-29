@@ -1,418 +1,416 @@
 ﻿var RegExpBuilder = function () {
-    var self = this;
+    this._literal = [];
+    this._groupsUsed = 0;
+    this._specialCharactersInsideCharacterClass = { "\^": true, "\-": true, "\]": true };
+    this._specialCharactersOutsideCharacterClass = { "\.": true, "\^": true, "\$": true, "\*": true, "\+": true, "\?": true, "\(": true, "\)": true, "\[": true, "\{": true };
+    this._escapedString = [];
 
-    self._literal = [];
-    self._groupsUsed = 0;
-    self._specialCharactersInsideCharacterClass = { "\^": true, "\-": true, "\]": true };
-    self._specialCharactersOutsideCharacterClass = { "\.": true, "\^": true, "\$": true, "\*": true, "\+": true, "\?": true, "\(": true, "\)": true, "\[": true, "\{": true };
-    self._escapedString = [];
+    this._clear();
+}
 
-    self._clear = function () {
-        self._ignoreCase = "";
-        self._multiLine = "";
-        self._min = -1;
-        self._max = -1;
-        self._of = "";
-        self._ofAny = false;
-        self._ofGroup = -1;
-        self._from = "";
-        self._notFrom = "";
-        self._like = "";
-        self._either = "";
-        self._reluctant = false;
-        self._capture = false;
+RegExpBuilder.prototype._clear = function () {
+    this._ignoreCase = "";
+    this._multiLine = "";
+    this._min = -1;
+    this._max = -1;
+    this._of = "";
+    this._ofAny = false;
+    this._ofGroup = -1;
+    this._from = "";
+    this._notFrom = "";
+    this._like = "";
+    this._either = "";
+    this._reluctant = false;
+    this._capture = false;
+}
+
+RegExpBuilder.prototype._flushState = function () {
+    if (this._of != "" || this._ofAny || this._ofGroup > 0 || this._from != "" || this._notFrom != "" || this._like != "") {
+        var captureLiteral = this._capture ? "" : "?:";
+        var quantityLiteral = this._getQuantityLiteral();
+        var characterLiteral = this._getCharacterLiteral();
+        var reluctantLiteral = this._reluctant ? "?" : "";
+        this._literal.push("(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")");
+        this._clear();
     }
+}
 
-    self._clear();
-
-    self._flushState = function () {
-        if (self._of != "" || self._ofAny || self._ofGroup > 0 || self._from != "" || self._notFrom != "" || self._like != "") {
-            var captureLiteral = self._capture ? "" : "?:";
-            var quantityLiteral = self._getQuantityLiteral();
-            var characterLiteral = self._getCharacterLiteral();
-            var reluctantLiteral = self._reluctant ? "?" : "";
-            self._literal.push("(" + captureLiteral + "(?:" + characterLiteral + ")" + quantityLiteral + reluctantLiteral + ")");
-            self._clear();
+RegExpBuilder.prototype._getQuantityLiteral = function () {
+    if (this._min != -1) {
+        if (this._max != -1) {
+            return "{" + this._min + "," + this._max + "}";
         }
+        return "{" + this._min + ",}";
     }
+    return "{0," + this._max + "}";
+}
 
-    self._getQuantityLiteral = function () {
-        if (self._min != -1) {
-            if (self._max != -1) {
-                return "{" + self._min + "," + self._max + "}";
-            }
-            return "{" + self._min + ",}";
-        }
-        return "{0," + self._max + "}";
+RegExpBuilder.prototype._getCharacterLiteral = function () {
+    if (this._of != "") {
+        return this._of;
     }
-
-    self._getCharacterLiteral = function () {
-        if (self._of != "") {
-            return self._of;
-        }
-        if (self._ofAny) {
-            return ".";
-        }
-        if (self._ofGroup > 0) {
-            return "\\" + self._ofGroup;
-        }
-        if (self._from != "") {
-            return "[" + self._from + "]";
-        }
-        if (self._notFrom != "") {
-            return "[^" + self._notFrom + "]";
-        }
-        if (self._like != "") {
-            return self._like;
-        }
+    if (this._ofAny) {
+        return ".";
     }
-
-    self.getLiteral = function () {
-        self._flushState();
-        return self._literal.join("");
+    if (this._ofGroup > 0) {
+        return "\\" + this._ofGroup;
     }
-
-    self._combineGroupNumberingAndGetLiteral = function (r) {
-        var literal = self._incrementGroupNumbering(r.getLiteral(), self._groupsUsed);
-        self._groupsUsed += r._groupsUsed;
-        return literal;
+    if (this._from != "") {
+        return "[" + this._from + "]";
     }
-
-    self._incrementGroupNumbering = function (literal, increment) {
-        if (increment > 0) {
-            literal = literal.replace(/[^\\]\\\d+/, function (groupReference) {
-                var groupNumber = parseInt(groupReference.substring(2)) + increment;
-                return groupReference.substring(0, 2) + groupNumber;
-            });
-        }
-        return literal;
+    if (this._notFrom != "") {
+        return "[^" + this._notFrom + "]";
     }
-
-    self.getRegExp = function () {
-        self._flushState();
-
-        return new RegExp(self._literal.join(""), self._ignoreCase + self._multiLine);
+    if (this._like != "") {
+        return this._like;
     }
+}
 
-    self.ignoreCase = function () {
-        self._ignoreCase = "i";
-        return self;
+RegExpBuilder.prototype.getLiteral = function () {
+    this._flushState();
+    return this._literal.join("");
+}
+
+RegExpBuilder.prototype._combineGroupNumberingAndGetLiteral = function (r) {
+    var literal = this._incrementGroupNumbering(r.getLiteral(), this._groupsUsed);
+    this._groupsUsed += r._groupsUsed;
+    return literal;
+}
+
+RegExpBuilder.prototype._incrementGroupNumbering = function (literal, increment) {
+    if (increment > 0) {
+        literal = literal.replace(/[^\\]\\\d+/, function (groupReference) {
+            var groupNumber = parseInt(groupReference.substring(2)) + increment;
+            return groupReference.substring(0, 2) + groupNumber;
+        });
     }
+    return literal;
+}
 
-    self.multiLine = function () {
-        self._multiLine = "m";
-        return self;
+RegExpBuilder.prototype.getRegExp = function () {
+    this._flushState();
+
+    return new RegExp(this._literal.join(""), this._ignoreCase + this._multiLine);
+}
+
+RegExpBuilder.prototype.ignoreCase = function () {
+    this._ignoreCase = "i";
+    return this;
+}
+
+RegExpBuilder.prototype.multiLine = function () {
+    this._multiLine = "m";
+    return this;
+}
+
+RegExpBuilder.prototype.startOfInput = function () {
+    this._literal.push("(?:^)");
+    return this;
+}
+
+RegExpBuilder.prototype.startOfLine = function () {
+    this.multiLine();
+    return this.startOfInput();
+}
+
+RegExpBuilder.prototype.endOfInput = function () {
+    this._flushState();
+    this._literal.push("(?:$)");
+    return this;
+}
+
+RegExpBuilder.prototype.endOfLine = function () {
+    this.multiLine();
+    return this.endOfInput();
+}
+
+RegExpBuilder.prototype.either = function (r) {
+    if (r.split) {
+        return this._eitherLike(new RegExpBuilder().exactly(1).of(r));
     }
-
-    self.startOfInput = function () {
-        self._literal.push("(?:^)");
-        return self;
+    else {
+        return this._eitherLike(r);
     }
+}
 
-    self.startOfLine = function () {
-        self.multiLine();
-        return self.startOfInput();
+RegExpBuilder.prototype._eitherLike = function (r) {
+    this._flushState();
+    this._either = this._combineGroupNumberingAndGetLiteral(r);
+    return this;
+}
+
+RegExpBuilder.prototype.or = function (r) {
+    if (r.split) {
+        return this._orLike(new RegExpBuilder().exactly(1).of(r));
     }
-
-    self.endOfInput = function () {
-        self._flushState();
-        self._literal.push("(?:$)");
-        return self;
+    else {
+        return this._orLike(r);
     }
+}
 
-    self.endOfLine = function () {
-        self.multiLine();
-        return self.endOfInput();
+RegExpBuilder.prototype._orLike = function (r) {
+    var either = this._either;
+    var or = this._combineGroupNumberingAndGetLiteral(r);
+    if (either == "") {
+        var lastOr = this._literal[this._literal.length - 1];
+        lastOr = lastOr.substring(0, lastOr.length - 1);
+        this._literal[this._literal.length - 1] = lastOr;
+        this._literal.push("|(?:" + or + "))");
     }
+    else {
+        this._literal.push("(?:(?:" + either + ")|(?:" + or + "))");
+    }
+    this._clear();
+    return this;
+}
 
-    self.either = function (r) {
-        if (r.split) {
-            return self._eitherLike(new RegExpBuilder().exactly(1).of(r));
+RegExpBuilder.prototype.exactly = function (n) {
+    this._flushState();
+    this._min = n;
+    this._max = n;
+    return this;
+}
+
+RegExpBuilder.prototype.min = function (n) {
+    this._flushState();
+    this._min = n;
+    return this;
+}
+
+RegExpBuilder.prototype.max = function (n) {
+    this._flushState();
+    this._max = n;
+    return this;
+}
+
+RegExpBuilder.prototype.of = function (s) {
+    this._of = this._escapeOutsideCharacterClass(s);
+    return this;
+}
+
+RegExpBuilder.prototype.ofAny = function () {
+    this._ofAny = true;
+    return this;
+}
+
+RegExpBuilder.prototype.ofGroup = function (n) {
+    this._ofGroup = n;
+    return this;
+}
+
+RegExpBuilder.prototype.from = function (s) {
+    this._from = this._escapeInsideCharacterClass(s.join(""));
+    return this;
+}
+
+RegExpBuilder.prototype.notFrom = function (s) {
+    this._notFrom = this._escapeInsideCharacterClass(s.join(""));
+    return this;
+}
+
+RegExpBuilder.prototype.like = function (r) {
+    this._like = this._combineGroupNumberingAndGetLiteral(r);
+    return this;
+}
+
+RegExpBuilder.prototype.reluctantly = function () {
+    this._reluctant = true;
+    return this;
+}
+
+RegExpBuilder.prototype.ahead = function (r) {
+    this._flushState();
+    this._literal.push("(?=" + this._combineGroupNumberingAndGetLiteral(r) + ")");
+    return this;
+}
+
+RegExpBuilder.prototype.notAhead = function (r) {
+    this._flushState();
+    this._literal.push("(?!" + this._combineGroupNumberingAndGetLiteral(r) + ")");
+    return this;
+}
+
+RegExpBuilder.prototype.asGroup = function () {
+    this._capture = true;
+    this._groupsUsed++;
+    return this;
+}
+
+RegExpBuilder.prototype.then = function (s) {
+    return this.exactly(1).of(s);
+}
+
+RegExpBuilder.prototype.find = function (s) {
+    return this.then(s);
+}
+
+RegExpBuilder.prototype.some = function (s) {
+    return this.min(1).from(s);
+}
+
+RegExpBuilder.prototype.maybeSome = function (s) {
+    return this.min(0).from(s);
+}
+
+RegExpBuilder.prototype.maybe = function (s) {
+    return this.max(1).of(s);
+}
+
+RegExpBuilder.prototype.something = function () {
+    return this.min(1).ofAny();
+}
+
+RegExpBuilder.prototype.somethingBut = function (s) {
+    if (s.length == 1) {
+        return this.exactly(1).notFrom([s]);
+    }
+    this.notAhead(new RegExpBuilder().exactly(1).of(s));
+    return this.min(1).ofAny();
+}
+
+RegExpBuilder.prototype.anything = function () {
+    return this.min(0).ofAny();
+}
+
+RegExpBuilder.prototype.anythingBut = function (s) {
+    if (s.length == 1) {
+        return this.max(1).notFrom([s]);
+    }
+    this.notAhead(new RegExpBuilder().exactly(1).of(s));
+    return this.min(0).ofAny();
+}
+
+RegExpBuilder.prototype.any = function () {
+    return this.exactly(1).ofAny();
+}
+
+RegExpBuilder.prototype.lineBreak = function () {
+    return this
+        .either("\r\n")
+        .or("\r")
+        .or("\n");
+}
+
+RegExpBuilder.prototype.lineBreaks = function () {
+    return this.like(new RegExpBuilder().lineBreak());
+}
+
+RegExpBuilder.prototype.whitespace = function () {
+    if (this._min == -1 && this._max == -1) {
+        return this.exactly(1).of("\s");
+    }
+    this._like = "\s";
+    return this;
+}
+
+RegExpBuilder.prototype.notWhitespace = function () {
+    if (this._min == -1 && this._max == -1) {
+        return this.exactly(1).of("\S");
+    }
+    this._like = "\S";
+    return this;
+}
+
+RegExpBuilder.prototype.tab = function () {
+    return this.exactly(1).of("\t");
+}
+
+RegExpBuilder.prototype.tabs = function () {
+    return this.like(new RegExpBuilder().tab());
+}
+
+RegExpBuilder.prototype.digit = function () {
+    return this.exactly(1).of("\d");
+}
+
+RegExpBuilder.prototype.notDigit = function () {
+    return this.exactly(1).of("\D");
+}
+
+RegExpBuilder.prototype.digits = function () {
+    return this.like(new RegExpBuilder().digit());
+}
+
+RegExpBuilder.prototype.notDigits = function () {
+    return this.like(new RegExpBuilder().notDigit());
+}
+
+RegExpBuilder.prototype.letter = function () {
+    this.exactly(1);
+    this._from = "A-Za-z";
+    return this;
+}
+
+RegExpBuilder.prototype.notLetter = function () {
+    this.exactly(1);
+    this._notFrom = "A-Za-z";
+    return this;
+}
+
+RegExpBuilder.prototype.letters = function () {
+    this._from = "A-Za-z";
+    return this;
+}
+
+RegExpBuilder.prototype.notLetters = function () {
+    this._notFrom = "A-Za-z";
+    return this;
+}
+
+RegExpBuilder.prototype.lowerCaseLetter = function () {
+    this.exactly(1);
+    this._from = "a-z";
+    return this;
+}
+
+RegExpBuilder.prototype.lowerCaseLetters = function () {
+    this._from = "a-z";
+    return this;
+}
+
+RegExpBuilder.prototype.upperCaseLetter = function () {
+    this.exactly(1);
+    this._from = "A-Z";
+    return this;
+}
+
+RegExpBuilder.prototype.upperCaseLetters = function () {
+    this._from = "A-Z";
+    return this;
+}
+
+RegExpBuilder.prototype.append = function (r) {
+    this.exactly(1);
+    this._like = this._combineGroupNumberingAndGetLiteral(r);
+    return this;
+}
+
+RegExpBuilder.prototype.optional = function (r) {
+    this.max(1);
+    this._like = this._combineGroupNumberingAndGetLiteral(r);
+    return this;
+}
+
+RegExpBuilder.prototype._escapeInsideCharacterClass = function (s) {
+    return this._escapeSpecialCharacters(s, this._specialCharactersInsideCharacterClass);
+}
+
+RegExpBuilder.prototype._escapeOutsideCharacterClass = function (s) {
+    return this._escapeSpecialCharacters(s, this._specialCharactersOutsideCharacterClass);
+}
+
+RegExpBuilder.prototype._escapeSpecialCharacters = function (s, specialCharacters) {
+    this._escapedString.length = 0;
+    for (var i = 0; i < s.length; i++) {
+        var character = s[i];
+        if (specialCharacters[character]) {
+            this._escapedString.push("\\" + character);
         }
         else {
-            return self._eitherLike(r);
+            this._escapedString.push(character);
         }
     }
-
-    self._eitherLike = function (r) {
-        self._flushState();
-        self._either = self._combineGroupNumberingAndGetLiteral(r);
-        return self;
-    }
-
-    self.or = function (r) {
-        if (r.split) {
-            return self._orLike(new RegExpBuilder().exactly(1).of(r));
-        }
-        else {
-            return self._orLike(r);
-        }
-    }
-
-    self._orLike = function (r) {
-        var either = self._either;
-        var or = self._combineGroupNumberingAndGetLiteral(r);
-        if (either == "") {
-            var lastOr = self._literal[self._literal.length - 1];
-            lastOr = lastOr.substring(0, lastOr.length - 1);
-            self._literal[self._literal.length - 1] = lastOr;
-            self._literal.push("|(?:" + or + "))");
-        }
-        else {
-            self._literal.push("(?:(?:" + either + ")|(?:" + or + "))");
-        }
-        self._clear();
-        return self;
-    }
-
-    self.exactly = function (n) {
-        self._flushState();
-        self._min = n;
-        self._max = n;
-        return self;
-    }
-
-    self.min = function (n) {
-        self._flushState();
-        self._min = n;
-        return self;
-    }
-
-    self.max = function (n) {
-        self._flushState();
-        self._max = n;
-        return self;
-    }
-
-    self.of = function (s) {
-        self._of = self._escapeOutsideCharacterClass(s);
-        return self;
-    }
-
-    self.ofAny = function () {
-        self._ofAny = true;
-        return self;
-    }
-
-    self.ofGroup = function (n) {
-        self._ofGroup = n;
-        return self;
-    }
-
-    self.from = function (s) {
-        self._from = self._escapeInsideCharacterClass(s.join(""));
-        return self;
-    }
-
-    self.notFrom = function (s) {
-        self._notFrom = self._escapeInsideCharacterClass(s.join(""));
-        return self;
-    }
-
-    self.like = function (r) {
-        self._like = self._combineGroupNumberingAndGetLiteral(r);
-        return self;
-    }
-
-    self.reluctantly = function () {
-        self._reluctant = true;
-        return self;
-    }
-
-    self.ahead = function (r) {
-        self._flushState();
-        self._literal.push("(?=" + self._combineGroupNumberingAndGetLiteral(r) + ")");
-        return self;
-    }
-
-    self.notAhead = function (r) {
-        self._flushState();
-        self._literal.push("(?!" + self._combineGroupNumberingAndGetLiteral(r) + ")");
-        return self;
-    }
-
-    self.asGroup = function () {
-        self._capture = true;
-        self._groupsUsed++;
-        return self;
-    }
-
-    self.then = function (s) {
-        return self.exactly(1).of(s);
-    }
-
-    self.find = function (s) {
-        return self.then(s);
-    }
-
-    self.some = function (s) {
-        return self.min(1).from(s);
-    }
-
-    self.maybeSome = function (s) {
-        return self.min(0).from(s);
-    }
-
-    self.maybe = function (s) {
-        return self.max(1).of(s);
-    }
-
-    self.something = function () {
-        return self.min(1).ofAny();
-    }
-
-    self.somethingBut = function (s) {
-        if (s.length == 1) {
-            return self.exactly(1).notFrom([s]);
-        }
-        self.notAhead(new RegExpBuilder().exactly(1).of(s));
-        return self.min(1).ofAny();
-    }
-
-    self.anything = function () {
-        return self.min(0).ofAny();
-    }
-
-    self.anythingBut = function (s) {
-        if (s.length == 1) {
-            return self.max(1).notFrom([s]);
-        }
-        self.notAhead(new RegExpBuilder().exactly(1).of(s));
-        return self.min(0).ofAny();
-    }
-
-    self.any = function () {
-        return self.exactly(1).ofAny();
-    }
-
-    self.lineBreak = function () {
-        return self
-            .either("\r\n")
-            .or("\r")
-            .or("\n");
-    }
-
-    self.lineBreaks = function () {
-        return self.like(new RegExpBuilder().lineBreak());
-    }
-
-    self.whitespace = function () {
-        if (self._min == -1 && self._max == -1) {
-            return self.exactly(1).of("\s");
-        }
-        self._like = "\s";
-        return self;
-    }
-
-    self.notWhitespace = function () {
-        if (self._min == -1 && self._max == -1) {
-            return self.exactly(1).of("\S");
-        }
-        self._like = "\S";
-        return self;
-    }
-
-    self.tab = function () {
-        return self.exactly(1).of("\t");
-    }
-
-    self.tabs = function () {
-        return self.like(new RegExpBuilder().tab());
-    }
-
-    self.digit = function () {
-        return self.exactly(1).of("\d");
-    }
-
-    self.notDigit = function () {
-        return self.exactly(1).of("\D");
-    }
-
-    self.digits = function () {
-        return self.like(new RegExpBuilder().digit());
-    }
-
-    self.notDigits = function () {
-        return self.like(new RegExpBuilder().notDigit());
-    }
-
-    self.letter = function () {
-        self.exactly(1);
-        self._from = "A-Za-z";
-        return self;
-    }
-
-    self.notLetter = function () {
-        self.exactly(1);
-        self._notFrom = "A-Za-z";
-        return self;
-    }
-
-    self.letters = function () {
-        self._from = "A-Za-z";
-        return self;
-    }
-
-    self.notLetters = function () {
-        self._notFrom = "A-Za-z";
-        return self;
-    }
-
-    self.lowerCaseLetter = function () {
-        self.exactly(1);
-        self._from = "a-z";
-        return self;
-    }
-
-    self.lowerCaseLetters = function () {
-        self._from = "a-z";
-        return self;
-    }
-
-    self.upperCaseLetter = function () {
-        self.exactly(1);
-        self._from = "A-Z";
-        return self;
-    }
-
-    self.upperCaseLetters = function () {
-        self._from = "A-Z";
-        return self;
-    }
-
-    self.append = function (r) {
-        self.exactly(1);
-        self._like = self._combineGroupNumberingAndGetLiteral(r);
-        return self;
-    }
-
-    self.optional = function (r) {
-        self.max(1);
-        self._like = self._combineGroupNumberingAndGetLiteral(r);
-        return self;
-    }
-
-    self._escapeInsideCharacterClass = function (s) {
-        return self._escapeSpecialCharacters(s, self._specialCharactersInsideCharacterClass);
-    }
-
-    self._escapeOutsideCharacterClass = function (s) {
-        return self._escapeSpecialCharacters(s, self._specialCharactersOutsideCharacterClass);
-    }
-
-    self._escapeSpecialCharacters = function (s, specialCharacters) {
-        self._escapedString.length = 0;
-        for (var i = 0; i < s.length; i++) {
-            var character = s[i];
-            if (specialCharacters[character]) {
-                self._escapedString.push("\\" + character);
-            }
-            else {
-                self._escapedString.push(character);
-            }
-        }
-        return self._escapedString.join("");
-    }
+    return this._escapedString.join("");
 }
 
 var RegExpBuilderFactory = function () {
