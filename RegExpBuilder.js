@@ -282,10 +282,9 @@ RegExpBuilder.prototype.any = function () {
 }
 
 RegExpBuilder.prototype.lineBreak = function () {
-    return this
-        .either("\\r\\n")
-        .or("\\r")
-        .or("\\n");
+    this._flushState();
+    this._literal.push("(?:\\r\\n|\\r|\\n)");
+    return this;
 }
 
 RegExpBuilder.prototype.lineBreaks = function () {
@@ -294,7 +293,9 @@ RegExpBuilder.prototype.lineBreaks = function () {
 
 RegExpBuilder.prototype.whitespace = function () {
     if (this._min == -1 && this._max == -1) {
-        return this.exactly(1).of("\\s");
+        this._flushState();
+        this._literal.push("(?:\\s)");
+        return this;
     }
     this._like = "\s";
     return this;
@@ -302,14 +303,18 @@ RegExpBuilder.prototype.whitespace = function () {
 
 RegExpBuilder.prototype.notWhitespace = function () {
     if (this._min == -1 && this._max == -1) {
-        return this.exactly(1).of("\\S");
+        this._flushState();
+        this._literal.push("(?:\\S)");
+        return this;
     }
     this._like = "\S";
     return this;
 }
 
 RegExpBuilder.prototype.tab = function () {
-    return this.exactly(1).of("\\t");
+    this._flushState();
+    this._literal.push("(?:\\t)");
+    return this;
 }
 
 RegExpBuilder.prototype.tabs = function () {
@@ -317,11 +322,15 @@ RegExpBuilder.prototype.tabs = function () {
 }
 
 RegExpBuilder.prototype.digit = function () {
-    return this.exactly(1).of("\\d");
+    this._flushState();
+    this._literal.push("(?:\\d)");
+    return this;
 }
 
 RegExpBuilder.prototype.notDigit = function () {
-    return this.exactly(1).of("\\D");
+    this._flushState();
+    this._literal.push("(?:\\D)");
+    return this;
 }
 
 RegExpBuilder.prototype.digits = function () {
@@ -389,7 +398,7 @@ RegExpBuilder.prototype.optional = function (r) {
 }
 
 RegExpBuilder.prototype._sanitize = function (s) {
-    return s.replace(/([.*+?^=!:${}()|\[\]\/])/g, "\\$1");
+    return s.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
 var RegExpBuilderFactory = function () {
