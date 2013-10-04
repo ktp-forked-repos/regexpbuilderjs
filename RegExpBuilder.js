@@ -1,9 +1,6 @@
 ﻿var RegExpBuilder = function () {
     this._literal = [];
     this._groupsUsed = 0;
-    this._specialCharactersInsideCharacterClass = { "\^": true, "\-": true, "\]": true };
-    this._specialCharactersOutsideCharacterClass = { "\.": true, "\^": true, "\$": true, "\*": true, "\+": true, "\?": true, "\(": true, "\)": true, "\[": true, "\{": true };
-    this._escapedString = [];
 
     this._clear();
 }
@@ -184,7 +181,7 @@ RegExpBuilder.prototype.max = function (n) {
 }
 
 RegExpBuilder.prototype.of = function (s) {
-    this._of = this._escapeOutsideCharacterClass(s);
+    this._of = this._sanitize(s);
     return this;
 }
 
@@ -199,12 +196,12 @@ RegExpBuilder.prototype.ofGroup = function (n) {
 }
 
 RegExpBuilder.prototype.from = function (s) {
-    this._from = this._escapeInsideCharacterClass(s.join(""));
+    this._from = this._sanitize(s.join(""));
     return this;
 }
 
 RegExpBuilder.prototype.notFrom = function (s) {
-    this._notFrom = this._escapeInsideCharacterClass(s.join(""));
+    this._notFrom = this._sanitize(s.join(""));
     return this;
 }
 
@@ -286,9 +283,9 @@ RegExpBuilder.prototype.any = function () {
 
 RegExpBuilder.prototype.lineBreak = function () {
     return this
-        .either("\r\n")
-        .or("\r")
-        .or("\n");
+        .either("\\r\\n")
+        .or("\\r")
+        .or("\\n");
 }
 
 RegExpBuilder.prototype.lineBreaks = function () {
@@ -297,7 +294,7 @@ RegExpBuilder.prototype.lineBreaks = function () {
 
 RegExpBuilder.prototype.whitespace = function () {
     if (this._min == -1 && this._max == -1) {
-        return this.exactly(1).of("\s");
+        return this.exactly(1).of("\\s");
     }
     this._like = "\s";
     return this;
@@ -305,14 +302,14 @@ RegExpBuilder.prototype.whitespace = function () {
 
 RegExpBuilder.prototype.notWhitespace = function () {
     if (this._min == -1 && this._max == -1) {
-        return this.exactly(1).of("\S");
+        return this.exactly(1).of("\\S");
     }
     this._like = "\S";
     return this;
 }
 
 RegExpBuilder.prototype.tab = function () {
-    return this.exactly(1).of("\t");
+    return this.exactly(1).of("\\t");
 }
 
 RegExpBuilder.prototype.tabs = function () {
@@ -320,11 +317,11 @@ RegExpBuilder.prototype.tabs = function () {
 }
 
 RegExpBuilder.prototype.digit = function () {
-    return this.exactly(1).of("\d");
+    return this.exactly(1).of("\\d");
 }
 
 RegExpBuilder.prototype.notDigit = function () {
-    return this.exactly(1).of("\D");
+    return this.exactly(1).of("\\D");
 }
 
 RegExpBuilder.prototype.digits = function () {
@@ -391,26 +388,8 @@ RegExpBuilder.prototype.optional = function (r) {
     return this;
 }
 
-RegExpBuilder.prototype._escapeInsideCharacterClass = function (s) {
-    return this._escapeSpecialCharacters(s, this._specialCharactersInsideCharacterClass);
-}
-
-RegExpBuilder.prototype._escapeOutsideCharacterClass = function (s) {
-    return this._escapeSpecialCharacters(s, this._specialCharactersOutsideCharacterClass);
-}
-
-RegExpBuilder.prototype._escapeSpecialCharacters = function (s, specialCharacters) {
-    this._escapedString.length = 0;
-    for (var i = 0; i < s.length; i++) {
-        var character = s[i];
-        if (specialCharacters[character]) {
-            this._escapedString.push("\\" + character);
-        }
-        else {
-            this._escapedString.push(character);
-        }
-    }
-    return this._escapedString.join("");
+RegExpBuilder.prototype._sanitize = function (s) {
+    return s.replace(/([.*+?^=!:${}()|\[\]\/])/g, "\\$1");
 }
 
 var RegExpBuilderFactory = function () {
