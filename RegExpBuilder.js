@@ -5,7 +5,9 @@
     this._clear();
 }
 
-RegExpBuilder.prototype._clear = function () {
+var self = RegExpBuilder.prototype;
+
+self._clear = function () {
     this._ignoreCase = "";
     this._multiLine = "";
     this._min = -1;
@@ -21,7 +23,7 @@ RegExpBuilder.prototype._clear = function () {
     this._capture = false;
 }
 
-RegExpBuilder.prototype._flushState = function () {
+self._flushState = function () {
     if (this._of != "" || this._ofAny || this._ofGroup > 0 || this._from != "" || this._notFrom != "" || this._like != "") {
         var captureLiteral = this._capture ? "" : "?:";
         var quantityLiteral = this._getQuantityLiteral();
@@ -32,7 +34,7 @@ RegExpBuilder.prototype._flushState = function () {
     }
 }
 
-RegExpBuilder.prototype._getQuantityLiteral = function () {
+self._getQuantityLiteral = function () {
     if (this._min != -1) {
         if (this._max != -1) {
             return "{" + this._min + "," + this._max + "}";
@@ -42,7 +44,7 @@ RegExpBuilder.prototype._getQuantityLiteral = function () {
     return "{0," + this._max + "}";
 }
 
-RegExpBuilder.prototype._getCharacterLiteral = function () {
+self._getCharacterLiteral = function () {
     if (this._of != "") {
         return this._of;
     }
@@ -63,18 +65,18 @@ RegExpBuilder.prototype._getCharacterLiteral = function () {
     }
 }
 
-RegExpBuilder.prototype.getLiteral = function () {
+self.getLiteral = function () {
     this._flushState();
     return this._literal.join("");
 }
 
-RegExpBuilder.prototype._combineGroupNumberingAndGetLiteral = function (r) {
+self._combineGroupNumberingAndGetLiteral = function (r) {
     var literal = this._incrementGroupNumbering(r.getLiteral(), this._groupsUsed);
     this._groupsUsed += r._groupsUsed;
     return literal;
 }
 
-RegExpBuilder.prototype._incrementGroupNumbering = function (literal, increment) {
+self._incrementGroupNumbering = function (literal, increment) {
     if (increment > 0) {
         literal = literal.replace(/[^\\]\\\d+/, function (groupReference) {
             var groupNumber = parseInt(groupReference.substring(2)) + increment;
@@ -84,44 +86,44 @@ RegExpBuilder.prototype._incrementGroupNumbering = function (literal, increment)
     return literal;
 }
 
-RegExpBuilder.prototype.getRegExp = function () {
+self.getRegExp = function () {
     this._flushState();
 
     return new RegExp(this._literal.join(""), this._ignoreCase + this._multiLine);
 }
 
-RegExpBuilder.prototype.ignoreCase = function () {
+self.ignoreCase = function () {
     this._ignoreCase = "i";
     return this;
 }
 
-RegExpBuilder.prototype.multiLine = function () {
+self.multiLine = function () {
     this._multiLine = "m";
     return this;
 }
 
-RegExpBuilder.prototype.startOfInput = function () {
+self.startOfInput = function () {
     this._literal.push("(?:^)");
     return this;
 }
 
-RegExpBuilder.prototype.startOfLine = function () {
+self.startOfLine = function () {
     this.multiLine();
     return this.startOfInput();
 }
 
-RegExpBuilder.prototype.endOfInput = function () {
+self.endOfInput = function () {
     this._flushState();
     this._literal.push("(?:$)");
     return this;
 }
 
-RegExpBuilder.prototype.endOfLine = function () {
+self.endOfLine = function () {
     this.multiLine();
     return this.endOfInput();
 }
 
-RegExpBuilder.prototype.either = function (r) {
+self.either = function (r) {
     if (r.split) {
         return this._eitherLike(new RegExpBuilder().exactly(1).of(r));
     }
@@ -130,13 +132,13 @@ RegExpBuilder.prototype.either = function (r) {
     }
 }
 
-RegExpBuilder.prototype._eitherLike = function (r) {
+self._eitherLike = function (r) {
     this._flushState();
     this._either = this._combineGroupNumberingAndGetLiteral(r);
     return this;
 }
 
-RegExpBuilder.prototype.or = function (r) {
+self.or = function (r) {
     if (r.split) {
         return this._orLike(new RegExpBuilder().exactly(1).of(r));
     }
@@ -145,7 +147,7 @@ RegExpBuilder.prototype.or = function (r) {
     }
 }
 
-RegExpBuilder.prototype._orLike = function (r) {
+self._orLike = function (r) {
     var either = this._either;
     var or = this._combineGroupNumberingAndGetLiteral(r);
     if (either == "") {
@@ -161,107 +163,107 @@ RegExpBuilder.prototype._orLike = function (r) {
     return this;
 }
 
-RegExpBuilder.prototype.exactly = function (n) {
+self.exactly = function (n) {
     this._flushState();
     this._min = n;
     this._max = n;
     return this;
 }
 
-RegExpBuilder.prototype.min = function (n) {
+self.min = function (n) {
     this._flushState();
     this._min = n;
     return this;
 }
 
-RegExpBuilder.prototype.max = function (n) {
+self.max = function (n) {
     this._flushState();
     this._max = n;
     return this;
 }
 
-RegExpBuilder.prototype.of = function (s) {
+self.of = function (s) {
     this._of = this._sanitize(s);
     return this;
 }
 
-RegExpBuilder.prototype.ofAny = function () {
+self.ofAny = function () {
     this._ofAny = true;
     return this;
 }
 
-RegExpBuilder.prototype.ofGroup = function (n) {
+self.ofGroup = function (n) {
     this._ofGroup = n;
     return this;
 }
 
-RegExpBuilder.prototype.from = function (s) {
+self.from = function (s) {
     this._from = this._sanitize(s.join(""));
     return this;
 }
 
-RegExpBuilder.prototype.notFrom = function (s) {
+self.notFrom = function (s) {
     this._notFrom = this._sanitize(s.join(""));
     return this;
 }
 
-RegExpBuilder.prototype.like = function (r) {
+self.like = function (r) {
     this._like = this._combineGroupNumberingAndGetLiteral(r);
     return this;
 }
 
-RegExpBuilder.prototype.reluctantly = function () {
+self.reluctantly = function () {
     this._reluctant = true;
     return this;
 }
 
-RegExpBuilder.prototype.ahead = function (r) {
+self.ahead = function (r) {
     this._flushState();
     this._literal.push("(?=" + this._combineGroupNumberingAndGetLiteral(r) + ")");
     return this;
 }
 
-RegExpBuilder.prototype.notAhead = function (r) {
+self.notAhead = function (r) {
     this._flushState();
     this._literal.push("(?!" + this._combineGroupNumberingAndGetLiteral(r) + ")");
     return this;
 }
 
-RegExpBuilder.prototype.asGroup = function () {
+self.asGroup = function () {
     this._capture = true;
     this._groupsUsed++;
     return this;
 }
 
-RegExpBuilder.prototype.then = function (s) {
+self.then = function (s) {
     return this.exactly(1).of(s);
 }
 
-RegExpBuilder.prototype.find = function (s) {
+self.find = function (s) {
     return this.then(s);
 }
 
-RegExpBuilder.prototype.some = function (s) {
+self.some = function (s) {
     return this.min(1).from(s);
 }
 
-RegExpBuilder.prototype.maybeSome = function (s) {
+self.maybeSome = function (s) {
     return this.min(0).from(s);
 }
 
-RegExpBuilder.prototype.maybe = function (s) {
+self.maybe = function (s) {
     return this.max(1).of(s);
 }
 
-RegExpBuilder.prototype.something = function () {
+self.something = function () {
     return this.min(1).ofAny();
 }
 
-RegExpBuilder.prototype.anything = function () {
+self.anything = function () {
     return this.min(0).ofAny();
 }
 
-RegExpBuilder.prototype.anythingBut = function (s) {
+self.anythingBut = function (s) {
     if (s.length == 1) {
         return this.min(0).notFrom([s]);
     }
@@ -269,21 +271,21 @@ RegExpBuilder.prototype.anythingBut = function (s) {
     return this.min(0).ofAny();
 }
 
-RegExpBuilder.prototype.any = function () {
+self.any = function () {
     return this.exactly(1).ofAny();
 }
 
-RegExpBuilder.prototype.lineBreak = function () {
+self.lineBreak = function () {
     this._flushState();
     this._literal.push("(?:\\r\\n|\\r|\\n)");
     return this;
 }
 
-RegExpBuilder.prototype.lineBreaks = function () {
+self.lineBreaks = function () {
     return this.like(new RegExpBuilder().lineBreak());
 }
 
-RegExpBuilder.prototype.whitespace = function () {
+self.whitespace = function () {
     if (this._min == -1 && this._max == -1) {
         this._flushState();
         this._literal.push("(?:\\s)");
@@ -293,7 +295,7 @@ RegExpBuilder.prototype.whitespace = function () {
     return this;
 }
 
-RegExpBuilder.prototype.notWhitespace = function () {
+self.notWhitespace = function () {
     if (this._min == -1 && this._max == -1) {
         this._flushState();
         this._literal.push("(?:\\S)");
@@ -303,93 +305,93 @@ RegExpBuilder.prototype.notWhitespace = function () {
     return this;
 }
 
-RegExpBuilder.prototype.tab = function () {
+self.tab = function () {
     this._flushState();
     this._literal.push("(?:\\t)");
     return this;
 }
 
-RegExpBuilder.prototype.tabs = function () {
+self.tabs = function () {
     return this.like(new RegExpBuilder().tab());
 }
 
-RegExpBuilder.prototype.digit = function () {
+self.digit = function () {
     this._flushState();
     this._literal.push("(?:\\d)");
     return this;
 }
 
-RegExpBuilder.prototype.notDigit = function () {
+self.notDigit = function () {
     this._flushState();
     this._literal.push("(?:\\D)");
     return this;
 }
 
-RegExpBuilder.prototype.digits = function () {
+self.digits = function () {
     return this.like(new RegExpBuilder().digit());
 }
 
-RegExpBuilder.prototype.notDigits = function () {
+self.notDigits = function () {
     return this.like(new RegExpBuilder().notDigit());
 }
 
-RegExpBuilder.prototype.letter = function () {
+self.letter = function () {
     this.exactly(1);
     this._from = "A-Za-z";
     return this;
 }
 
-RegExpBuilder.prototype.notLetter = function () {
+self.notLetter = function () {
     this.exactly(1);
     this._notFrom = "A-Za-z";
     return this;
 }
 
-RegExpBuilder.prototype.letters = function () {
+self.letters = function () {
     this._from = "A-Za-z";
     return this;
 }
 
-RegExpBuilder.prototype.notLetters = function () {
+self.notLetters = function () {
     this._notFrom = "A-Za-z";
     return this;
 }
 
-RegExpBuilder.prototype.lowerCaseLetter = function () {
+self.lowerCaseLetter = function () {
     this.exactly(1);
     this._from = "a-z";
     return this;
 }
 
-RegExpBuilder.prototype.lowerCaseLetters = function () {
+self.lowerCaseLetters = function () {
     this._from = "a-z";
     return this;
 }
 
-RegExpBuilder.prototype.upperCaseLetter = function () {
+self.upperCaseLetter = function () {
     this.exactly(1);
     this._from = "A-Z";
     return this;
 }
 
-RegExpBuilder.prototype.upperCaseLetters = function () {
+self.upperCaseLetters = function () {
     this._from = "A-Z";
     return this;
 }
 
-RegExpBuilder.prototype.append = function (r) {
+self.append = function (r) {
     this.exactly(1);
     this._like = this._combineGroupNumberingAndGetLiteral(r);
     return this;
 }
 
-RegExpBuilder.prototype.optional = function (r) {
+self.optional = function (r) {
     this.max(1);
     this._like = this._combineGroupNumberingAndGetLiteral(r);
     return this;
 }
 
-RegExpBuilder.prototype._sanitize = function (s) {
+self._sanitize = function (s) {
     return s.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
