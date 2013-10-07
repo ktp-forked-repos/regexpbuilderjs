@@ -257,21 +257,13 @@ RegExpBuilder.prototype.something = function () {
     return this.min(1).ofAny();
 }
 
-RegExpBuilder.prototype.somethingBut = function (s) {
-    if (s.length == 1) {
-        return this.exactly(1).notFrom([s]);
-    }
-    this.notAhead(new RegExpBuilder().exactly(1).of(s));
-    return this.min(1).ofAny();
-}
-
 RegExpBuilder.prototype.anything = function () {
     return this.min(0).ofAny();
 }
 
 RegExpBuilder.prototype.anythingBut = function (s) {
     if (s.length == 1) {
-        return this.max(1).notFrom([s]);
+        return this.min(0).notFrom([s]);
     }
     this.notAhead(new RegExpBuilder().exactly(1).of(s));
     return this.min(0).ofAny();
