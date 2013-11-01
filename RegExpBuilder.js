@@ -163,6 +163,22 @@ self._orLike = function (r) {
     return this;
 }
 
+self.neither = function (r) {
+    if (r.split) {
+        return this.notAhead(new RegExpBuilder().exactly(1).of(r));
+    }
+    return this.notAhead(r);
+}
+
+self.nor = function (r) {
+    if (this._min == 0 && this._ofAny) {
+        this._min = -1;
+        this._ofAny = false;
+    }
+    this.neither(r);
+    return this.min(0).ofAny();
+}
+
 self.exactly = function (n) {
     this._flushState();
     this._min = n;
