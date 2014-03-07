@@ -8,8 +8,7 @@
 var self = RegExpBuilder.prototype;
 
 self._clear = function () {
-    this._ignoreCase = "";
-    this._multiLine = "";
+    this._flags = "";
     this._min = -1;
     this._max = -1;
     this._of = "";
@@ -89,16 +88,21 @@ self._incrementGroupNumbering = function (literal, increment) {
 self.getRegExp = function () {
     this._flushState();
 
-    return new RegExp(this._literal.join(""), this._ignoreCase + this._multiLine);
+    return new RegExp(this._literal.join(""), this._flags);
 }
 
 self.ignoreCase = function () {
-    this._ignoreCase = "i";
+    this._flags += "i";
     return this;
 }
 
 self.multiLine = function () {
-    this._multiLine = "m";
+    this._flags += "m";
+    return this;
+}
+
+self.globalMatch = function () {
+    this._flags += "g";
     return this;
 }
 
