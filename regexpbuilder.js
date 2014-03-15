@@ -1,4 +1,5 @@
 ﻿var RegExpBuilder = function () {
+    this._flags = "";
     this._literal = [];
     this._groupsUsed = 0;
 
@@ -8,7 +9,6 @@
 var self = RegExpBuilder.prototype;
 
 self._clear = function () {
-    this._flags = "";
     this._min = -1;
     this._max = -1;
     this._of = "";
@@ -92,17 +92,23 @@ self.getRegExp = function () {
 }
 
 self.ignoreCase = function () {
-    this._flags += "i";
+    if (this._flags.indexOf("i") == -1) {
+        this._flags += "i";
+    }
     return this;
 }
 
 self.multiLine = function () {
-    this._flags += "m";
+    if (this._flags.indexOf("m") == -1) {
+        this._flags += "m";
+    }
     return this;
 }
 
 self.globalMatch = function () {
-    this._flags += "g";
+    if (this._flags.indexOf("g") == -1) {
+        this._flags += "g";
+    }
     return this;
 }
 
