@@ -91,25 +91,23 @@ self.getRegExp = function () {
     return new RegExp(this._literal.join(""), this._flags);
 }
 
-self.ignoreCase = function () {
-    if (this._flags.indexOf("i") == -1) {
-        this._flags += "i";
+self._addFlag = function (flag) {
+    if (this._flags.indexOf(flag) == -1) {
+        this._flags += flag;
     }
     return this;
+}
+
+self.ignoreCase = function () {
+    return this._addFlag("i");
 }
 
 self.multiLine = function () {
-    if (this._flags.indexOf("m") == -1) {
-        this._flags += "m";
-    }
-    return this;
+    return this._addFlag("m");
 }
 
 self.globalMatch = function () {
-    if (this._flags.indexOf("g") == -1) {
-        this._flags += "g";
-    }
-    return this;
+    return this._addFlag("g");
 }
 
 self.startOfInput = function () {
