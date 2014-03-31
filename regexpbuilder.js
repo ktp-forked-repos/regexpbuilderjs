@@ -132,7 +132,7 @@ self.endOfLine = function () {
 }
 
 self.either = function (r) {
-    if (r.split) {
+    if (typeof r == "string") {
         return this._eitherLike(new RegExpBuilder().exactly(1).of(r));
     }
     else {
@@ -147,7 +147,7 @@ self._eitherLike = function (r) {
 }
 
 self.or = function (r) {
-    if (r.split) {
+    if (typeof r == "string") {
         return this._orLike(new RegExpBuilder().exactly(1).of(r));
     }
     else {
@@ -172,7 +172,7 @@ self._orLike = function (r) {
 }
 
 self.neither = function (r) {
-    if (r.split) {
+    if (typeof r == "string") {
         return this.notAhead(new RegExpBuilder().exactly(1).of(r));
     }
     return this.notAhead(r);
