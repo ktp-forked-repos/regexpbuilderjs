@@ -279,10 +279,6 @@ self.maybe = function (s) {
     return this.max(1).of(s);
 }
 
-self.something = function () {
-    return this.min(1).ofAny();
-}
-
 self.anything = function () {
     return this.min(0).ofAny();
 }
@@ -488,14 +484,6 @@ var RegExpBuilderFactory = function () {
 
     self.maybe = function (s) {
         return new RegExpBuilder().maybe(s);
-    }
-
-    self.something = function () {
-        return new RegExpBuilder().something();
-    }
-
-    self.somethingBut = function (s) {
-        return new RegExpBuilder().somethingBut(s);
     }
 
     self.anything = function () {
