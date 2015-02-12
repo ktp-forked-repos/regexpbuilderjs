@@ -315,7 +315,7 @@ self.whitespace = function () {
         this._literal.push("(?:\\s)");
         return this;
     }
-    this._like = "\s";
+    this._like = "\\s";
     return this;
 }
 
@@ -325,7 +325,7 @@ self.notWhitespace = function () {
         this._literal.push("(?:\\S)");
         return this;
     }
-    this._like = "\S";
+    this._like = "\\S";
     return this;
 }
 
