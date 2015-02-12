@@ -23,7 +23,7 @@ var regex = r
   .digit()
   .getRegExp();
   
-regex.test("$10.00")); // true
+regex.test("$10.00"); // true
 ```
 
 <h3>Nested patterns</h3>
