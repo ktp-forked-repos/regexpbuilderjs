@@ -9,7 +9,7 @@ There are implementations available for Dart, Javascript, Java, and Python.
 Here are a couple of examples using Javascript:
 
 ```
-var r = new RegExpBuilder();
+var r = new RegExpBuilderFactory();
 ```
 
 <h3>Money</h3>
