@@ -8,6 +8,10 @@ There are implementations available for Dart, Javascript, Java, and Python.
 <h2>Examples</h2>
 Here are a couple of examples using Javascript:
 
+```
+var r = new RegExpBuilder();
+```
+
 <h3>Money</h3>
 
 ```
