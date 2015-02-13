@@ -1,0 +1,25 @@
+﻿{
+  "name": "regexpbuilder",
+  "version": "1.0.0",
+  "description": "Create regular expressions using chained methods.",
+  "homepage": "https://github.com/thebinarysearchtree/regexpbuilderjs",
+  "author": {
+    "name": "Andrew Jones",
+    "url": "https://github.com/thebinarysearchtree"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thebinarysearchtree/regexpbuilderjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thebinarysearchtree/regexpbuilderjs/issues"
+  },
+  "main": "regexpbuilder.js",
+  "scripts": {
+    "test": "node ./test/tests.js"
+  },
+  "keywords": [
+    "regexp"
+  ],
+  "license": "MIT"
+}

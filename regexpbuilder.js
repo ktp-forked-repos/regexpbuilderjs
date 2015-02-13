@@ -279,6 +279,10 @@ self.maybe = function (s) {
     return this.max(1).of(s);
 }
 
+self.something = function () {
+    return this.min(1).ofAny();
+}
+
 self.anything = function () {
     return this.min(0).ofAny();
 }
@@ -415,134 +419,142 @@ self._sanitize = function (s) {
     return s.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-var RegExpBuilderFactory = function () {
-    var self = this;
+if (typeof exports == 'undefined') {
+    exports = {};
+}
 
-    self.ignoreCase = function () {
+exports.ignoreCase = function () {
         return new RegExpBuilder().ignoreCase();
-    }
+}
 
-    self.multiLine = function () {
-        return new RegExpBuilder().multiLine();
-    }
+exports.multiLine = function () {
+    return new RegExpBuilder().multiLine();
+}
 
-    self.startOfInput = function () {
-        return new RegExpBuilder().startOfInput();
-    }
+exports.globalMatch = function () {
+    return new RegExpBuilder().globalMatch();
+}
 
-    self.startOfLine = function () {
-        return new RegExpBuilder().startOfLine();
-    }
+exports.startOfInput = function () {
+    return new RegExpBuilder().startOfInput();
+}
 
-    self.endOfInput = function () {
-        return new RegExpBuilder().endOfInput();
-    }
+exports.startOfLine = function () {
+    return new RegExpBuilder().startOfLine();
+}
 
-    self.endOfLine = function () {
-        return new RegExpBuilder().endOfLine();
-    }
+exports.endOfInput = function () {
+    return new RegExpBuilder().endOfInput();
+}
 
-    self.either = function (r) {
-        return new RegExpBuilder().either(r);
-    }
+exports.endOfLine = function () {
+    return new RegExpBuilder().endOfLine();
+}
 
-    self.exactly = function (n) {
-        return new RegExpBuilder().exactly(n);
-    }
+exports.either = function (r) {
+    return new RegExpBuilder().either(r);
+}
 
-    self.min = function (n) {
-        return new RegExpBuilder().min(n);
-    }
+exports.neither = function (r) {
+    return new RegExpBuilder().neither(r);
+}
 
-    self.max = function (n) {
-        return new RegExpBuilder().max(n);
-    }
+exports.exactly = function (n) {
+    return new RegExpBuilder().exactly(n);
+}
 
-    self.ahead = function (r) {
-        return new RegExpBuilder().ahead(r);
-    }
+exports.min = function (n) {
+    return new RegExpBuilder().min(n);
+}
 
-    self.notAhead = function (r) {
-        return new RegExpBuilder().notAhead(r);
-    }
+exports.max = function (n) {
+    return new RegExpBuilder().max(n);
+}
 
-    self.then = function (s) {
-        return new RegExpBuilder().then(s);
-    }
+exports.ahead = function (r) {
+    return new RegExpBuilder().ahead(r);
+}
 
-    self.find = function (s) {
-        return new RegExpBuilder().find(s);
-    }
+exports.notAhead = function (r) {
+    return new RegExpBuilder().notAhead(r);
+}
 
-    self.some = function (s) {
-        return new RegExpBuilder().some(s);
-    }
+exports.then = function (s) {
+    return new RegExpBuilder().then(s);
+}
 
-    self.maybeSome = function (s) {
-        return new RegExpBuilder().maybeSome(s);
-    }
+exports.find = function (s) {
+    return new RegExpBuilder().find(s);
+}
 
-    self.maybe = function (s) {
-        return new RegExpBuilder().maybe(s);
-    }
+exports.some = function (s) {
+    return new RegExpBuilder().some(s);
+}
 
-    self.anything = function () {
-        return new RegExpBuilder().anything();
-    }
+exports.maybeSome = function (s) {
+    return new RegExpBuilder().maybeSome(s);
+}
 
-    self.anythingBut = function (s) {
-        return new RegExpBuilder().anythingBut(s);
-    }
+exports.maybe = function (s) {
+    return new RegExpBuilder().maybe(s);
+}
 
-    self.any = function () {
-        return new RegExpBuilder().any();
-    }
+exports.anything = function () {
+    return new RegExpBuilder().anything();
+}
 
-    self.lineBreak = function () {
-        return new RegExpBuilder().lineBreak();
-    }
+exports.anythingBut = function (s) {
+    return new RegExpBuilder().anythingBut(s);
+}
 
-    self.whitespace = function () {
-        return new RegExpBuilder().whitespace();
-    }
+exports.any = function () {
+    return new RegExpBuilder().any();
+}
 
-    self.notWhitespace = function () {
-        return new RegExpBuilder().notWhitespace();
-    }
+exports.lineBreak = function () {
+    return new RegExpBuilder().lineBreak();
+}
 
-    self.tab = function () {
-        return new RegExpBuilder().tab();
-    }
+exports.whitespace = function () {
+    return new RegExpBuilder().whitespace();
+}
 
-    self.digit = function () {
-        return new RegExpBuilder().digit();
-    }
+exports.notWhitespace = function () {
+    return new RegExpBuilder().notWhitespace();
+}
 
-    self.notDigit = function () {
-        return new RegExpBuilder().notDigit();
-    }
+exports.tab = function () {
+    return new RegExpBuilder().tab();
+}
 
-    self.letter = function () {
-        return new RegExpBuilder().letter();
-    }
+exports.digit = function () {
+    return new RegExpBuilder().digit();
+}
 
-    self.notLetter = function () {
-        return new RegExpBuilder().notLetter();
-    }
+exports.notDigit = function () {
+    return new RegExpBuilder().notDigit();
+}
 
-    self.lowerCaseLetter = function () {
-        return new RegExpBuilder().lowerCaseLetter();
-    }
+exports.letter = function () {
+    return new RegExpBuilder().letter();
+}
 
-    self.upperCaseLetter = function () {
-        return new RegExpBuilder().upperCaseLetter();
-    }
+exports.notLetter = function () {
+    return new RegExpBuilder().notLetter();
+}
 
-    self.append = function (r) {
-        return new RegExpBuilder().append(r);
-    }
+exports.lowerCaseLetter = function () {
+    return new RegExpBuilder().lowerCaseLetter();
+}
 
-    self.optional = function (r) {
-        return new RegExpBuilder().optional(r);
-    }
+exports.upperCaseLetter = function () {
+    return new RegExpBuilder().upperCaseLetter();
+}
+
+exports.append = function (r) {
+    return new RegExpBuilder().append(r);
+}
+
+exports.optional = function (r) {
+    return new RegExpBuilder().optional(r);
 }

@@ -53,7 +53,7 @@ var Test = function (name, test) {
 }
 
 var tests = [];
-var r = new RegExpBuilderFactory();
+var r = require('../regexpbuilder');
 tests.push(new Test("startOfLine", function (self) {
     var regex = r
         .startOfLine()
