@@ -424,7 +424,7 @@ if (typeof exports == 'undefined') {
 }
 
 exports.ignoreCase = function () {
-        return new RegExpBuilder().ignoreCase();
+    return new RegExpBuilder().ignoreCase();
 }
 
 exports.multiLine = function () {
