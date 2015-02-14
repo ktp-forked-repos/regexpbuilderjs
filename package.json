@@ -1,6 +1,6 @@
 ﻿{
   "name": "regexpbuilder",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "description": "Create regular expressions using chained methods.",
   "homepage": "https://github.com/thebinarysearchtree/regexpbuilderjs",
   "author": {
