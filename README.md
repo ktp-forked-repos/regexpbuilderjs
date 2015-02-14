@@ -7,13 +7,11 @@ Install regexpbuilder using npm.
 ```
 npm install regexpbuilder
 ```
-Then require it into any module.
+<h2>Examples</h2>
+Here are a couple of examples using Javascript:
 ```
 var r = require('regexpbuilder');
 ```
-<h2>Examples</h2>
-Here are a couple of examples using Javascript:
-
 <h3>Money</h3>
 
 ```
