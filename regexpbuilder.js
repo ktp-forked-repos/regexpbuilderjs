@@ -419,4 +419,138 @@
     }
 }
 
-module.exports = RegExpBuilder;
+exports.ignoreCase = function () {
+    return new RegExpBuilder().ignoreCase();
+}
+
+exports.multiLine = function () {
+    return new RegExpBuilder().multiLine();
+}
+
+exports.globalMatch = function () {
+    return new RegExpBuilder().globalMatch();
+}
+
+exports.startOfInput = function () {
+    return new RegExpBuilder().startOfInput();
+}
+
+exports.startOfLine = function () {
+    return new RegExpBuilder().startOfLine();
+}
+
+exports.endOfInput = function () {
+    return new RegExpBuilder().endOfInput();
+}
+
+exports.endOfLine = function () {
+    return new RegExpBuilder().endOfLine();
+}
+
+exports.either = function (r) {
+    return new RegExpBuilder().either(r);
+}
+
+exports.neither = function (r) {
+    return new RegExpBuilder().neither(r);
+}
+
+exports.exactly = function (n) {
+    return new RegExpBuilder().exactly(n);
+}
+
+exports.min = function (n) {
+    return new RegExpBuilder().min(n);
+}
+
+exports.max = function (n) {
+    return new RegExpBuilder().max(n);
+}
+
+exports.ahead = function (r) {
+    return new RegExpBuilder().ahead(r);
+}
+
+exports.notAhead = function (r) {
+    return new RegExpBuilder().notAhead(r);
+}
+
+exports.then = function (s) {
+    return new RegExpBuilder().then(s);
+}
+
+exports.find = function (s) {
+    return new RegExpBuilder().find(s);
+}
+
+exports.some = function (s) {
+    return new RegExpBuilder().some(s);
+}
+
+exports.maybeSome = function (s) {
+    return new RegExpBuilder().maybeSome(s);
+}
+
+exports.maybe = function (s) {
+    return new RegExpBuilder().maybe(s);
+}
+
+exports.anything = function () {
+    return new RegExpBuilder().anything();
+}
+
+exports.anythingBut = function (s) {
+    return new RegExpBuilder().anythingBut(s);
+}
+
+exports.any = function () {
+    return new RegExpBuilder().any();
+}
+
+exports.lineBreak = function () {
+    return new RegExpBuilder().lineBreak();
+}
+
+exports.whitespace = function () {
+    return new RegExpBuilder().whitespace();
+}
+
+exports.notWhitespace = function () {
+    return new RegExpBuilder().notWhitespace();
+}
+
+exports.tab = function () {
+    return new RegExpBuilder().tab();
+}
+
+exports.digit = function () {
+    return new RegExpBuilder().digit();
+}
+
+exports.notDigit = function () {
+    return new RegExpBuilder().notDigit();
+}
+
+exports.letter = function () {
+    return new RegExpBuilder().letter();
+}
+
+exports.notLetter = function () {
+    return new RegExpBuilder().notLetter();
+}
+
+exports.lowerCaseLetter = function () {
+    return new RegExpBuilder().lowerCaseLetter();
+}
+
+exports.upperCaseLetter = function () {
+    return new RegExpBuilder().upperCaseLetter();
+}
+
+exports.append = function (r) {
+    return new RegExpBuilder().append(r);
+}
+
+exports.optional = function (r) {
+    return new RegExpBuilder().optional(r);
+}

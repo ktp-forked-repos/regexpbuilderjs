@@ -6,13 +6,13 @@ RegExpBuilder integrates regular expressions into the programming language, ther
 Here are a couple of examples using Javascript:
 
 ```
-const RegExpBuilder = require('regexpbuilder');
+var r = require('regexpbuilder');
 ```
 
 <h3>Money</h3>
 
 ```
-var regex = new RegExpBuilder()
+var regex = r
   .find("$")
   .min(1).digits()
   .then(".")
@@ -26,11 +26,11 @@ regex.test("$10.00"); // true
 <h3>Nested patterns</h3>
 
 ```
-var pattern = new RegExpBuilder()
+var pattern = r
   .min(1).of("p")
   .min(2).of("q");
 
-var regex = new RegExpBuilder()
+var regex = r
   .exactly(2).like(pattern)
   .getRegExp();
 
