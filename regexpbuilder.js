@@ -108,6 +108,10 @@
   globalMatch() {
     return this._addFlag('g');
   }
+
+  sticky() {
+    return this._addFlag('y');
+  }
   
   startOfInput() {
     this._literal.push('(?:^)');
